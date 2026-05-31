@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura AI - Your Multilingual Halal Mental Wellness Companion</title>
+    <meta name="description" content="Aura AI is a premium, fully interactive, multilingual, and halal-compliant mental wellness platform. Experience empathetic chatbot support, generative natural soundscapes, a silent breathing coach, and mood analytics.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Ambient Glow Blobs -->
+    <div class="ambient-glow blob-1" id="glow-1"></div>
+    <div class="ambient-glow blob-2" id="glow-2"></div>
+    <div class="ambient-glow blob-3" id="glow-3"></div>
+
+    <!-- Navigation Header -->
+    <header class="main-header">
+        <div class="container header-container">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="url(#logo-grad)" />
+                    <circle cx="12" cy="12" r="6" stroke="white" stroke-width="1.5" stroke-dasharray="3 3" />
+                    <defs>
+                        <linearGradient id="logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#a78bfa" />
+                            <stop offset="100%" stop-color="#10b981" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text">Aura AI</span>
+            </div>
+
+            <!-- Responsive Mobile Toggle -->
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- Nav Links -->
+            <nav class="navbar" id="navbar">
+                <ul class="nav-list">
+                    <li><a href="#features" data-localize="nav-features">Features</a></li>
+                    <li><a href="#aura-wave" data-localize="nav-wave">Aura Wave</a></li>
+                    <li><a href="#chat" data-localize="nav-chat">Meet Aura</a></li>
+                    <li><a href="#mood" data-localize="nav-mood">Mood Tracker</a></li>
+                    <li><a href="#breathing" data-localize="nav-breathing">Breathing</a></li>
+                    <li><a href="#safety" data-localize="nav-safety">Safety</a></li>
+                </ul>
+            </nav>
+
+            <!-- Actions (Language Switcher + CTA Button) -->
+            <div class="header-actions">
+                <div class="lang-selector-container">
+                    <button class="lang-btn" id="lang-btn">
+                        <span class="lang-icon">🌐</span>
+                        <span class="lang-active" id="lang-active-label">English</span>
+                        <span class="chevron">▼</span>
+                    </button>
+                    <ul class="lang-dropdown" id="lang-dropdown">
+                        <li data-lang="en">English</li>
+                        <li data-lang="hi">हिन्दी (Hindi)</li>
+                        <li data-lang="ar">العربية (Arabic)</li>
+                        <li data-lang="es">Español (Spanish)</li>
+                        <li data-lang="fr">Français (French)</li>
+                        <li data-lang="ur">اردو (Urdu)</li>
+                    </ul>
+                </div>
+                <a href="#chat" class="btn btn-primary btn-glow" data-localize="nav-cta">Start Free</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <div class="halal-badge">
+                    <span class="badge-dot"></span>
+                    <span data-localize="badge-halal">100% Halal Certified - Strictly No Music</span>
+                </div>
+                <h1 data-localize="hero-title">A Safe Space for Your Thoughts, Anytime.</h1>
+                <p class="lead-text" data-localize="hero-desc">Experience the world's first voice-activated, multilingual mental wellness companion. Safe, compassionate, and built completely free of music or forbidden themes—tailored strictly to support your peace of mind.</p>
+                <div class="hero-buttons">
+                    <a href="#chat" class="btn btn-primary btn-lg btn-glow" data-localize="hero-btn-primary">Speak with Aura</a>
+                    <a href="#aura-wave" class="btn btn-secondary btn-lg" data-localize="hero-btn-secondary">Explore Soundscapes</a>
+                </div>
+                <div class="hero-trust">
+                    <div class="trust-item">
+                        <span class="trust-icon">🛡️</span>
+                        <span data-localize="trust-privacy">100% Private & Encrypted</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-icon">🤝</span>
+                        <span data-localize="trust-clinical">Clinical Safety Guardrails</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-icon">⚡</span>
+                        <span data-localize="trust-languages">6 Languages Supported</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="glowing-orb-container">
+                    <div class="glowing-orb"></div>
+                    <div class="floating-card c1">
+                        <span class="card-icon">🧠</span>
+                        <div>
+                            <h4 data-localize="fc1-title">Mindfulness</h4>
+                            <p data-localize="fc1-desc">Stress reduction tips</p>
+                        </div>
+                    </div>
+                    <div class="floating-card c2">
+                        <span class="card-icon">🌧️</span>
+                        <div>
+                            <h4 data-localize="fc2-title">Natural Therapy</h4>
+                            <p data-localize="fc2-desc">Pure synthesized rainfall</p>
+                        </div>
+                    </div>
+                    <div class="floating-card c3">
+                        <span class="card-icon">🎙️</span>
+                        <div>
+                            <h4 data-localize="fc3-title">Voice Companion</h4>
+                            <p data-localize="fc3-desc">Just talk to express</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Aura Wave Generative Soundscape Section -->
+    <section class="wave-section" id="aura-wave">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-tagline" data-localize="wave-tagline">Sensory Healing</span>
+                <h2 data-localize="wave-title">Aura Wave: Generative Natural Soundscapes</h2>
+                <p class="section-desc" data-localize="wave-desc">A highly visual and auditory sensory experience. No instruments, songs, or tunes—pure synthesized natural atmospheric waves created directly by mathematical calculations in your browser.</p>
+            </div>
+
+            <div class="wave-grid">
+                <!-- Liquid Art Canvas visualizer -->
+                <div class="wave-card visualizer-card">
+                    <div class="card-header">
+                        <h3 data-localize="wave-vis-title">Interactive Liquid Healing Canvas</h3>
+                        <div class="status-indicator">
+                            <span class="status-pulse"></span>
+                            <span id="vis-status-text" data-localize="wave-status-active">Fluid Motion Active</span>
+                        </div>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="wave-canvas"></canvas>
+                        <!-- Dynamic overlay for central focus -->
+                        <div class="canvas-focus-ring"></div>
+                        <div class="canvas-label" id="canvas-wave-label">CALM STATE</div>
+                    </div>
+                    <div class="state-selector-container">
+                        <button class="state-btn active" data-state="calm" data-localize="wave-state-calm">Calm Mode</button>
+                        <button class="state-btn" data-state="focus" data-localize="wave-state-focus">Focus Mode</button>
+                        <button class="state-btn" data-state="rest" data-localize="wave-state-rest">Rest Mode</button>
+                    </div>
+                </div>
+
+                <!-- Web Audio mixer controls -->
+                <div class="wave-card mixer-card">
+                    <div class="mixer-header">
+                        <h3 data-localize="wave-mix-title">Halal Nature Mixer</h3>
+                        <p data-localize="wave-mix-desc">Adjust sliders to blend natural synthesized waves. 100% free of instruments or background tunes.</p>
+                    </div>
+
+                    <div class="sound-control-panel">
+                        <button class="sound-toggle-btn" id="sound-master-btn">
+                            <span class="play-icon">▶</span>
+                            <span class="btn-text" id="sound-master-text" data-localize="wave-btn-play">Generate Soundscape</span>
+                        </button>
+                    </div>
+
+                    <div class="mixer-sliders">
+                        <!-- Rainfall Slider -->
+                        <div class="slider-group">
+                            <div class="slider-label-row">
+                                <span class="slider-title">
+                                    <span class="slider-icon">🌧️</span>
+                                    <span data-localize="wave-slider-rain">Soft Rainfall</span>
+                                </span>
+                                <span class="slider-value" id="val-rain">0%</span>
+                            </div>
+                            <div class="slider-wrapper">
+                                <input type="range" id="slider-rain" min="0" max="100" value="30" class="custom-slider">
+                                <div class="slider-track-fill" id="fill-rain"></div>
+                            </div>
+                        </div>
+
+                        <!-- Wind Slider -->
+                        <div class="slider-group">
+                            <div class="slider-label-row">
+                                <span class="slider-title">
+                                    <span class="slider-icon">🍃</span>
+                                    <span data-localize="wave-slider-wind">Rustling Breeze</span>
+                                </span>
+                                <span class="slider-value" id="val-wind">0%</span>
+                            </div>
+                            <div class="slider-wrapper">
+                                <input type="range" id="slider-wind" min="0" max="100" value="20" class="custom-slider">
+                                <div class="slider-track-fill" id="fill-wind"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mixer-footer-note">
+                        <span class="shield-check">🛡️</span>
+                        <p data-localize="wave-mixer-note">These ambient textures are scientifically synthesized in real-time by combining high/low frequency white and pink noise filters to match natural physics. Completely clean and permissible.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chat Companion Section -->
+    <section class="chat-section" id="chat">
+        <div class="container">
+            <div class="chat-wrapper-grid">
+                <!-- Chat Left Info -->
+                <div class="chat-info">
+                    <span class="section-tagline" data-localize="chat-tagline">24/7 Compassionate Support</span>
+                    <h2 data-localize="chat-title">Empathetic Mental Support Without Limits</h2>
+                    <p class="section-desc" data-localize="chat-desc">Aura is built strictly to understand and guide you through feelings of anxiety, burn-out, or loneliness. Speak or type to start a private conversation. Safe, halal, and completely locked to wellness guidance.</p>
+
+                    <div class="voice-highlight-box">
+                        <div class="voice-badge">
+                            <span class="mic-wave-dot"></span>
+                            <span data-localize="voice-badge-text">Voice-Enabled Companion</span>
+                        </div>
+                        <h4 data-localize="voice-box-title">Don't feel like typing?</h4>
+                        <p data-localize="voice-box-desc">Simply click the microphone icon inside the chat box, speak naturally, and watch Aura record your words. Enable the <strong>Calming Audio Readback</strong> button to hear Aura speak back comforting tips in your native language.</p>
+                    </div>
+
+                    <!-- Voice Synthesis Control -->
+                    <div class="audio-toggle-card">
+                        <div class="toggle-control">
+                            <span class="speaker-icon">🔊</span>
+                            <div>
+                                <h4 data-localize="speech-toggle-title">Calming Audio Readback</h4>
+                                <p data-localize="speech-toggle-desc">Aura will read its empathetic responses back to you in a soothing voice.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="speech-synthesis-toggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Sandbox Widget -->
+                <div class="chat-widget-card">
+                    <div class="chat-widget-header">
+                        <div class="bot-avatar">
+                            <div class="avatar-glow"></div>
+                            <span>A</span>
+                        </div>
+                        <div>
+                            <h4>Aura AI Companion</h4>
+                            <span class="pulse-indicator">
+                                <span class="dot"></span>
+                                <span id="chat-online-status" data-localize="chat-online">Always Listening & Compassionate</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Chat Message Area -->
+                    <div class="chat-history" id="chat-history">
+                        <!-- Dynamic Messages Rendered here -->
+                        <div class="chat-bubble bot-message">
+                            <div class="message-content" data-localize="chat-welcome">
+                                Hello, I am Aura. I am a safe, private space designed to support your mental well-being and listen to whatever is on your mind. How are you feeling today?
+                            </div>
+                            <span class="message-time" data-localize="chat-time-now">Just now</span>
+                        </div>
+                    </div>
+
+                    <!-- Typing Indicator -->
+                    <div class="typing-indicator-container" id="typing-indicator">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </div>
+
+                    <!-- Presets to jumpstart conversation -->
+                    <div class="presets-row">
+                        <span class="presets-label" data-localize="chat-suggested">Quick Prompts:</span>
+                        <div class="presets-scroll" id="presets-container">
+                            <button class="preset-bubble" data-msg="feeling-overwhelmed" data-localize="preset-1">I feel overwhelmed</button>
+                            <button class="preset-bubble" data-msg="cannot-sleep" data-localize="preset-2">I can't sleep</button>
+                            <button class="preset-bubble" data-msg="need-focus" data-localize="preset-3">I need focus tips</button>
+                            <button class="preset-bubble" data-msg="gk-test" data-localize="preset-4">Who is the President of India?</button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input Panel -->
+                    <div class="chat-input-bar">
+                        <!-- Microphone Speech-to-Text Button -->
+                        <button class="input-action-btn mic-btn" id="chat-mic-btn" title="Speak to Aura">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                <line x1="12" y1="19" x2="12" y2="23"></line>
+                                <line x1="8" y1="23" x2="16" y2="23"></line>
+                            </svg>
+                        </button>
+                        
+                        <input type="text" id="chat-text-input" placeholder="Type your thoughts or feelings..." data-localize-placeholder="chat-placeholder">
+                        
+                        <!-- Send Button -->
+                        <button class="input-action-btn send-btn" id="chat-send-btn" title="Send message">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Microphone Active Visual Modal inside Chat -->
+                    <div class="mic-status-overlay" id="mic-status-overlay">
+                        <div class="listening-card">
+                            <div class="ripple-circle">
+                                <span>🎙️</span>
+                                <div class="pulse-ring r1"></div>
+                                <div class="pulse-ring r2"></div>
+                            </div>
+                            <h4 id="speech-status-header" data-localize="mic-listening">Listening to your voice...</h4>
+                            <p id="speech-transcript-preview" class="transcript-preview" data-localize="mic-preview">Speak now to express your thoughts.</p>
+                            <button class="btn btn-secondary btn-sm" id="cancel-speech-btn" data-localize="mic-cancel">Stop Listening</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mood Clarity & Analytics Section -->
+    <section class="mood-section" id="mood">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-tagline" data-localize="mood-tagline">Visualizing Your Journey</span>
+                <h2 data-localize="mood-title">Daily Mood & Wellness Tracker</h2>
+                <p class="section-desc" data-localize="mood-desc">Checking in with your feelings is a critical stepping stone in mental hygiene. Select your mood, record your daily check-in, and watch your mental wellness dashboard simulate weekly analytical statistics.</p>
+            </div>
+
+            <div class="mood-grid">
+                <!-- Mood Check-in Selector -->
+                <div class="mood-card selector-card">
+                    <h3 data-localize="mood-check-title">How do you feel right now?</h3>
+                    <div class="emojis-row">
+                        <button class="mood-emoji-btn" data-mood="calm">
+                            <span class="emoji">😊</span>
+                            <span class="label" data-localize="mood-c">Calm</span>
+                        </button>
+                        <button class="mood-emoji-btn" data-mood="stressed">
+                            <span class="emoji">😰</span>
+                            <span class="label" data-localize="mood-s">Stressed</span>
+                        </button>
+                        <button class="mood-emoji-btn" data-mood="focused">
+                            <span class="emoji">🧠</span>
+                            <span class="label" data-localize="mood-f">Focused</span>
+                        </button>
+                        <button class="mood-emoji-btn" data-mood="exhausted">
+                            <span class="emoji">😴</span>
+                            <span class="label" data-localize="mood-e">Tired</span>
+                        </button>
+                    </div>
+
+                    <div class="mood-log-panel">
+                        <h4 data-localize="mood-note-title">AI Clarity Recommendation:</h4>
+                        <div class="ai-recommendation-box" id="ai-mood-rec">
+                            <p data-localize="mood-rec-default">Select your mood emoji above. Aura's wellness analyzer will provide personalized clinical recommendations and adjust your dashboard stats.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mood Analytics Graph Panel -->
+                <div class="mood-card analytics-card">
+                    <div class="analytics-header">
+                        <h3 data-localize="mood-stat-title">Weekly Wellness Metrics</h3>
+                        <span class="analytics-badge" id="weekly-score-badge">Score: 84%</span>
+                    </div>
+
+                    <!-- Simulated SVG Bar Graph -->
+                    <div class="chart-container">
+                        <div class="chart-y-axis">
+                            <span>100</span>
+                            <span>50</span>
+                            <span>0</span>
+                        </div>
+                        <div class="chart-bars">
+                            <div class="chart-column">
+                                <div class="chart-bar-fill" id="bar-mon" style="height: 80%">
+                                    <span class="bar-value">80%</span>
+                                </div>
+                                <span class="day-label" data-localize="day-m">Mon</span>
+                            </div>
+                            <div class="chart-column">
+                                <div class="chart-bar-fill" id="bar-tue" style="height: 85%">
+                                    <span class="bar-value">85%</span>
+                                </div>
+                                <span class="day-label" data-localize="day-t">Tue</span>
+                            </div>
+                            <div class="chart-column">
+                                <div class="chart-bar-fill" id="bar-wed" style="height: 70%">
+                                    <span class="bar-value">70%</span>
+                                </div>
+                                <span class="day-label" data-localize="day-w">Wed</span>
+                            </div>
+                            <div class="chart-column">
+                                <div class="chart-bar-fill" id="bar-thu" style="height: 90%">
+                                    <span class="bar-value">90%</span>
+                                </div>
+                                <span class="day-label" data-localize="day-th">Thu</span>
+                            </div>
+                            <div class="chart-column">
+                                <div class="chart-bar-fill" id="bar-fri" style="height: 75%">
+                                    <span class="bar-value">75%</span>
+                                </div>
+                                <span class="day-label" data-localize="day-f">Fri</span>
+                            </div>
+                            <div class="chart-column">
+                                <div class="chart-bar-fill" id="bar-sat" style="height: 92%">
+                                    <span class="bar-value">92%</span>
+                                </div>
+                                <span class="day-label" data-localize="day-sa">Sat</span>
+                            </div>
+                            <div class="chart-column">
+                                <div class="chart-bar-fill" id="bar-sun" style="height: 84%">
+                                    <span class="bar-value">84%</span>
+                                </div>
+                                <span class="day-label" data-localize="day-su">Sun</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-legend">
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: var(--primary)"></span>
+                            <span data-localize="mood-legend-calm">Clarity Score (Average)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: var(--accent-green)"></span>
+                            <span data-localize="mood-legend-active">Mindful Habits Logged</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guided Breathing Coach Section -->
+    <section class="breathing-section" id="breathing">
+        <div class="container">
+            <div class="breathing-grid">
+                <!-- Breathing Coach Details -->
+                <div class="breathing-info">
+                    <span class="section-tagline" data-localize="breath-tagline">Restorative Mindfulness</span>
+                    <h2 data-localize="breath-title">Guided Silent Breathing Pacer</h2>
+                    <p class="section-desc" data-localize="breath-desc">Steer your nervous system away from anxiety in less than 60 seconds. Our custom-paced breathing coach works in absolute silence—completely Halal and backed by clinical respiratory psychology.</p>
+
+                    <div class="breathing-modes">
+                        <!-- Mode 1: Relax -->
+                        <div class="mode-card active" data-bmode="relax">
+                            <div class="mode-meta">
+                                <h4 data-localize="breath-m1-title">Settle Stress (Box Breathing)</h4>
+                                <p data-localize="breath-m1-desc">Perfect for immediate panic or high work stress. Equal 4s cycles.</p>
+                            </div>
+                            <span class="mode-ratio">4 - 4 - 4 - 4</span>
+                        </div>
+
+                        <!-- Mode 2: Focus -->
+                        <div class="mode-card" data-bmode="focus">
+                            <div class="mode-meta">
+                                <h4 data-localize="breath-m2-title">Enhance Focus (Steady State)</h4>
+                                <p data-localize="breath-m2-desc">Deep oxygen intake, longer exhales to alert the brain.</p>
+                            </div>
+                            <span class="mode-ratio">4 - 4 - 8</span>
+                        </div>
+
+                        <!-- Mode 3: Sleep -->
+                        <div class="mode-card" data-bmode="sleep">
+                            <div class="mode-meta">
+                                <h4 data-localize="breath-m3-title">Deep Sleep (Melatonin Induction)</h4>
+                                <p data-localize="breath-m3-desc">The famous 4-7-8 ratio to trigger immediate sleep chemicals.</p>
+                            </div>
+                            <span class="mode-ratio">4 - 7 - 8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Breathing Coach Visualizer -->
+                <div class="breathing-visualizer-card">
+                    <div class="coach-container">
+                        <!-- Pulsing Breathing Ring -->
+                        <div class="breathing-ring-outer" id="breathing-ring">
+                            <div class="breathing-ring-inner">
+                                <div class="breathing-glow-core"></div>
+                                <span class="breathing-cues" id="breathing-cue" data-localize="breath-cue-ready">Ready</span>
+                                <span class="breathing-timer" id="breathing-timer">0s</span>
+                            </div>
+                        </div>
+                        
+                        <div class="coach-controls">
+                            <button class="btn btn-primary btn-glow" id="start-breathing-btn" data-localize="breath-btn-start">Start Breathing</button>
+                        </div>
+                        
+                        <div class="coach-cues-bar">
+                            <div class="cue-indicator" id="cue-in" data-localize="breath-cue-in">Inhale</div>
+                            <div class="cue-indicator" id="cue-hold" data-localize="breath-cue-hold">Hold</div>
+                            <div class="cue-indicator" id="cue-out" data-localize="breath-cue-out">Exhale</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillars & Features Grid Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-tagline" data-localize="pillars-tagline">Why Aura?</span>
+                <h2 data-localize="pillars-title">The Standard of Safe AI Companionship</h2>
+                <p class="section-desc" data-localize="pillars-desc">Aura blends advanced natural language models with a deeply respectful design system to build an environment that feels warm, respectful, and secure.</p>
+            </div>
+
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <span class="feat-icon">🌐</span>
+                    <h3 data-localize="p1-title">6 Native Languages</h3>
+                    <p data-localize="p1-desc">Translate UI and speak or type to a chatbot that fully understands Hindi, Arabic, Spanish, French, Urdu, and English.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <span class="feat-icon">🔒</span>
+                    <h3 data-localize="p2-title">Absolute Privacy</h3>
+                    <p data-localize="p2-desc">Your chat logs are stored entirely in your local browser sandbox. We never harvest, sell, or analyze your emotional conversations.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <span class="feat-icon">🍃</span>
+                    <h3 data-localize="p3-title">Pure Halal Audio</h3>
+                    <p data-localize="p3-desc">We respect spiritual safety. Sound therapy relies strictly on natural synthesized rainfall and winds—zero music or instruments.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="feature-card">
+                    <span class="feat-icon">🎙️</span>
+                    <h3 data-localize="p4-title">Voice Recognition</h3>
+                    <p data-localize="p4-desc">No energy to type during anxiety? Simply speak. Our Web Speech engine converts your voice and talks back empathetically.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety & Crisis Center Section -->
+    <section class="safety-section" id="safety">
+        <div class="container">
+            <div class="safety-wrapper-card">
+                <div class="safety-header text-center">
+                    <span class="safety-badge" data-localize="safety-badge">Clinical Ethics</span>
+                    <h2 data-localize="safety-title">Our Trust, Boundaries & Safety Protocols</h2>
+                    <p class="safety-desc" data-localize="safety-desc">Aura is a mental wellness companion, not a replacement for clinical therapy. We maintain clear boundaries to ensure safety and redirect users in crisis immediately to real-world help.</p>
+                </div>
+
+                <div class="safety-tabs-wrapper">
+                    <!-- Tab Headers -->
+                    <div class="tab-headers">
+                        <button class="tab-btn active" data-tab="boundaries" data-localize="safety-tab-1">Aura's Boundaries</button>
+                        <button class="tab-btn" data-tab="emergency" data-localize="safety-tab-2">🚨 Emergency Hotline Directory</button>
+                    </div>
+
+                    <!-- Tab Contents -->
+                    <div class="tab-contents">
+                        <!-- Tab 1: Boundaries -->
+                        <div class="tab-pane active" id="tab-boundaries">
+                            <div class="boundary-grid">
+                                <div class="boundary-item">
+                                    <h4>✅ What Aura CAN do</h4>
+                                    <ul>
+                                        <li data-localize="can-1">Provide comforting, empathetic active listening.</li>
+                                        <li data-localize="can-2">Offer evidence-based relaxation and breathing paced guides.</li>
+                                        <li data-localize="can-3">Teach lifestyle management, sleep guidelines, and organization.</li>
+                                        <li data-localize="can-4">Offer completely private local tracking logs.</li>
+                                    </ul>
+                                </div>
+                                <div class="boundary-item">
+                                    <h4>❌ What Aura CANNOT do</h4>
+                                    <ul>
+                                        <li data-localize="cant-1">Provide medical diagnosis or clinical medication advice.</li>
+                                        <li data-localize="cant-2">Substitute professional treatment, psychologists, or clinics.</li>
+                                        <li data-localize="cant-3">Answer unrelated general knowledge (GK) trivia queries.</li>
+                                        <li data-localize="cant-4">Listen to or encourage harmful ideation without raising a crisis flag.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: Helplines -->
+                        <div class="tab-pane" id="tab-emergency">
+                            <div class="helpline-alert">
+                                <strong>⚠️ If you are in immediate danger or having thoughts of self-harm, please contact these free, 24/7 confidential services right now:</strong>
+                            </div>
+                            <div class="helpline-directory">
+                                <div class="country-helpline">
+                                    <h5>🇮🇳 India</h5>
+                                    <p><strong>Vandrevala Foundation:</strong> <a href="tel:+919999666555">+91 9999 666 555</a></p>
+                                    <p><strong>KIRAN Helpline:</strong> <a href="tel:18005990019">1800-599-0019</a></p>
+                                </div>
+                                <div class="country-helpline">
+                                    <h5>🇺🇸 United States</h5>
+                                    <p><strong>Suicide & Crisis Lifeline:</strong> Call or text <a href="tel:988">988</a></p>
+                                    <p><strong>The Crisis Text Line:</strong> Text HOME to 741741</p>
+                                </div>
+                                <div class="country-helpline">
+                                    <h5>🇬🇧 United Kingdom</h5>
+                                    <p><strong>Samaritans UK:</strong> Call <a href="tel:116123">116 123</a></p>
+                                    <p><strong>NHS Mental Health Services:</strong> Call <a href="tel:111">111</a></p>
+                                </div>
+                                <div class="country-helpline">
+                                    <h5>🇨🇦 Canada</h5>
+                                    <p><strong>Suicide Crisis Helpline:</strong> Call or text <a href="tel:988">988</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <div class="logo">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="url(#footer-grad)" />
+                        <defs>
+                            <linearGradient id="footer-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#a78bfa" />
+                                <stop offset="100%" stop-color="#10b981" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="logo-text">Aura AI</span>
+                </div>
+                <p data-localize="footer-slogan">Compassionate AI mental wellness. Private, Multilingual, and completely Halal.</p>
+            </div>
+            <div class="footer-links">
+                <p>&copy; 2026 Aura AI. Built with utmost ethical and therapeutic care.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- App JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>

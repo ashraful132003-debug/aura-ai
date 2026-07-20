@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#070B14">
+<meta name="description" content="Aura AI — a safe, private mental wellness companion. Talk to an AI that truly listens, breathe, track your mood, and heal — anytime, in any language.">
+<title>Aura AI — Mental Wellness for Everyone</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="Aura AI — Mental Wellness for Everyone">
+<meta property="og:description" content="A private, multilingual AI wellness companion — empathetic chat, synthesized soundscapes, breathing coach, mood analytics dashboard. 100% in-browser.">
+<meta property="og:url" content="https://ashraful132003-debug.github.io/aura-ai/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Aura AI — Mental Wellness for Everyone">
+<meta name="twitter:description" content="A private, multilingual AI wellness companion — chat, soundscapes, breathing coach, and a live analytics dashboard.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#070B14;
+  --bg-2:#0B1120;
+  --panel:rgba(255,255,255,.045);
+  --panel-2:rgba(255,255,255,.07);
+  --line:rgba(255,255,255,.09);
+  --line-2:rgba(255,255,255,.16);
+  --ink:#EAF0FB;
+  --mut:#93A0B8;
+  --dim:#5D6A82;
+  --teal:#6EE7D8;
+  --vio:#A78BFA;
+  --peach:#FFC2B4;
+  --grad:linear-gradient(115deg,var(--teal),var(--vio));
+  --r-lg:24px; --r-md:16px; --r-sm:12px;
+  --nav-h:68px;
+  --pad:clamp(20px,5vw,64px);
+  --shadow:0 24px 60px -24px rgba(0,0,0,.6);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+html,body{overflow-x:hidden}
+body{
+  font-family:'Outfit',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--ink);
+  line-height:1.6;font-weight:400;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+::selection{background:rgba(110,231,216,.28);color:#fff}
+img,svg,canvas{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:6px}
+
+/* ============ 3D CANVAS & FALLBACK ============ */
+#bg3d{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-fallback{display:none;position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-fallback::before,.bg-fallback::after{
+  content:"";position:absolute;width:60vmax;height:60vmax;border-radius:50%;
+  filter:blur(90px);opacity:.16;
+}
+.bg-fallback::before{background:var(--teal);top:-25vmax;right:-20vmax}
+.bg-fallback::after{background:var(--vio);bottom:-30vmax;left:-20vmax}
+body.no3d #bg3d{display:none}
+body.no3d .bg-fallback{display:block}
+main{position:relative;z-index:1}
+
+/* ============ TYPE ============ */
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.12;letter-spacing:-.01em}
+.h-em{font-style:italic;font-weight:500;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1{font-size:clamp(2.5rem,7.2vw,4.6rem)}
+h2{font-size:clamp(1.9rem,4.6vw,3rem)}
+h3{font-size:clamp(1.12rem,2.4vw,1.3rem);font-weight:600}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.78rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:18px;
+}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--teal);opacity:.7}
+.lede{color:var(--mut);font-size:clamp(1rem,2vw,1.15rem);font-weight:300;max-width:56ch}
+
+/* ============ LAYOUT ============ */
+.wrap{max-width:1160px;margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+section{padding:clamp(72px,11vw,130px) 0;position:relative}
+.sec-head{margin-bottom:clamp(36px,6vw,64px)}
+
+/* reveal on scroll */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}
+}
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;height:var(--nav-h);
+  display:flex;align-items:center;
+  padding:0 var(--pad);
+  padding-top:env(safe-area-inset-top);
+  transition:background .4s,border-color .4s,backdrop-filter .4s;
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{background:rgba(7,11,20,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom-color:var(--line)}
+.nav-inner{width:100%;max-width:1160px;margin:0 auto;display:flex;align-items:center;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:1.35rem;font-weight:600;letter-spacing:-.01em}
+.logo-orb{width:26px;height:26px;border-radius:50%;background:var(--grad);box-shadow:0 0 18px rgba(110,231,216,.55);animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
+.nav-links{display:flex;gap:26px;margin-left:auto;align-items:center}
+.nav-links a{font-size:.92rem;color:var(--mut);font-weight:500;transition:color .25s}
+.nav-links a:hover{color:var(--ink)}
+.lang-sel{
+  background:var(--panel);border:1px solid var(--line);border-radius:99px;
+  padding:7px 12px;font-size:.85rem;color:var(--mut);appearance:none;cursor:pointer;
+}
+.lang-sel option{background:var(--bg-2);color:var(--ink)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:13px 26px;border-radius:99px;font-weight:600;font-size:.95rem;
+  transition:transform .3s var(--ease),box-shadow .3s,background .3s,border-color .3s;
+  will-change:transform;
+}
+.btn:active{transform:scale(.97)}
+.btn-pri{background:var(--grad);color:#06121A;box-shadow:0 8px 28px -8px rgba(110,231,216,.5)}
+.btn-pri:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(110,231,216,.6)}
+.btn-ghost{border:1px solid var(--line-2);color:var(--ink);background:var(--panel)}
+.btn-ghost:hover{border-color:var(--teal);background:var(--panel-2)}
+.nav .btn{padding:10px 20px;font-size:.88rem}
+.burger{display:none;margin-left:auto;width:44px;height:44px;flex-direction:column;align-items:center;justify-content:center;gap:6px;z-index:60}
+.burger span{width:22px;height:2px;background:var(--ink);border-radius:2px;transition:transform .35s var(--ease),opacity .3s}
+.burger.open span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.mnav{
+  position:fixed;inset:0;z-index:55;background:rgba(7,11,20,.96);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  opacity:0;pointer-events:none;transition:opacity .35s;
+}
+.mnav.open{opacity:1;pointer-events:auto}
+.mnav a{font-family:'Fraunces',serif;font-size:1.7rem;padding:10px 20px;color:var(--mut);transition:color .25s}
+.mnav a:hover{color:var(--ink)}
+.mnav .btn{margin-top:18px}
+@media (max-width:880px){
+  .nav-links{display:none}
+  .burger{display:flex}
+}
+
+/* ============ HERO ============ */
+.hero{min-height:100svh;display:flex;align-items:center;padding-top:calc(var(--nav-h) + 24px);padding-bottom:60px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;width:100%}
+.hero-copy{max-width:600px}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:9px;padding:8px 16px;border-radius:99px;
+  background:var(--panel);border:1px solid var(--line);font-size:.82rem;color:var(--mut);margin-bottom:26px;
+}
+.hero-tag .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);animation:pulse 2.6s infinite}
+.hero p.lede{margin:24px 0 34px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:44px}
+.trust{display:flex;flex-wrap:wrap;gap:10px 22px;color:var(--dim);font-size:.85rem;font-weight:500}
+.trust span{display:inline-flex;align-items:center;gap:7px}
+.hero-orbspace{min-height:280px}
+@media (max-width:880px){
+  .hero{text-align:center}
+  .hero-grid{grid-template-columns:1fr;gap:0}
+  .hero-copy{margin:0 auto}
+  .hero-cta,.trust{justify-content:center}
+  .hero-orbspace{display:none}
+}
+
+/* ============ FEATURE CARDS ============ */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:960px){.grid3{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.grid3,.grid2{grid-template-columns:1fr}}
+.card{
+  position:relative;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:clamp(22px,3.4vw,32px);
+  transition:transform .5s var(--ease),border-color .4s,background .4s;
+  transform-style:preserve-3d;overflow:hidden;
+}
+.card::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;opacity:0;transition:opacity .5s;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,20%),rgba(110,231,216,.09),transparent 60%);
+  pointer-events:none;
+}
+.card:hover{border-color:var(--line-2);background:var(--panel-2)}
+.card:hover::before{opacity:1}
+.card .ico{
+  width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:1.5rem;
+  background:linear-gradient(140deg,rgba(110,231,216,.14),rgba(167,139,250,.14));
+  border:1px solid var(--line);margin-bottom:18px;
+}
+.card h3{margin-bottom:10px}
+.card p{color:var(--mut);font-size:.95rem;font-weight:300}
+
+/* ============ PANELS (soundscape / chat / mood / breath) ============ */
+.panel{
+  background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
+  border:1px solid var(--line);border-radius:28px;
+  padding:clamp(20px,3.6vw,36px);box-shadow:var(--shadow);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4.5vw,56px);align-items:center}
+@media (max-width:920px){.split{grid-template-columns:1fr}}
+
+/* soundscape */
+.viz{height:120px;position:relative;border-radius:var(--r-md);background:rgba(0,0,0,.28);border:1px solid var(--line);overflow:hidden;margin-bottom:22px}
+.mix-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.mix-row:last-of-type{border-bottom:0}
+.mix-row .lbl{width:118px;flex:none;font-size:.93rem;font-weight:500;display:flex;gap:8px;align-items:center}
+.mix-row .val{width:44px;flex:none;text-align:right;font-size:.82rem;color:var(--dim);font-variant-numeric:tabular-nums}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;flex:1;height:28px;background:transparent;cursor:pointer;min-width:0;
+}
+input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:99px;background:linear-gradient(90deg,var(--teal) var(--fill,0%),rgba(255,255,255,.12) var(--fill,0%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:19px;height:19px;border-radius:50%;background:#fff;margin-top:-7px;box-shadow:0 2px 10px rgba(0,0,0,.5);border:0}
+input[type=range]::-moz-range-track{height:5px;border-radius:99px;background:rgba(255,255,255,.12)}
+input[type=range]::-moz-range-progress{height:5px;border-radius:99px;background:var(--teal)}
+input[type=range]::-moz-range-thumb{width:19px;height:19px;border-radius:50%;background:#fff;border:0;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+.note{font-size:.82rem;color:var(--dim);margin-top:16px;line-height:1.55}
+
+/* chat */
+.chat{display:flex;flex-direction:column;height:560px;max-height:72svh;overflow:hidden}
+.chat-head{display:flex;align-items:center;gap:10px 12px;flex-wrap:wrap;row-gap:10px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.chat-head .who{min-width:0}
+.chat-ava{width:42px;height:42px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-size:1.2rem;flex:none;box-shadow:0 0 16px rgba(110,231,216,.4)}
+.chat-head .who{line-height:1.25}
+.chat-head .who b{font-weight:600;font-size:.98rem}
+.chat-head .who small{color:var(--teal);font-size:.78rem;display:flex;align-items:center;gap:6px}
+.chat-head .who small::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.tts-toggle{margin-left:auto;font-size:.78rem;color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:7px 13px;transition:.3s}
+.tts-toggle.on{color:#06121A;background:var(--grad);border-color:transparent;font-weight:600}
+.chat-log{flex:1;overflow-y:auto;padding:18px 4px;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin;scrollbar-color:var(--line-2) transparent;overscroll-behavior:contain}
+.msg{max-width:82%;padding:13px 17px;border-radius:18px;font-size:.94rem;font-weight:300;line-height:1.55;animation:msgin .45s var(--ease)}
+@keyframes msgin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.msg.ai{align-self:flex-start;background:var(--panel-2);border:1px solid var(--line);border-bottom-left-radius:6px}
+.msg.me{align-self:flex-end;background:linear-gradient(120deg,rgba(110,231,216,.2),rgba(167,139,250,.22));border:1px solid rgba(167,139,250,.3);border-bottom-right-radius:6px}
+.msg.crisis{border-color:rgba(255,140,140,.45);background:rgba(255,100,100,.08)}
+.msg a{color:var(--teal);font-weight:500;text-decoration:underline}
+.typing{display:inline-flex;gap:5px;padding:15px 18px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--mut);animation:tp 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tp{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding:10px 0}
+.chip{font-size:.8rem;padding:8px 14px;border-radius:99px;border:1px solid var(--line);color:var(--mut);background:var(--panel);transition:.3s;white-space:nowrap}
+.chip:hover{border-color:var(--teal);color:var(--ink)}
+.chat-in{display:flex;gap:10px;align-items:center;border:1px solid var(--line-2);border-radius:99px;padding:6px 6px 6px 18px;background:rgba(0,0,0,.25)}
+.chat-in input{flex:1;background:none;border:0;outline:0;font-size:16px;color:var(--ink);min-width:0}
+.chat-in input::placeholder{color:var(--dim)}
+.icobtn{width:42px;height:42px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:1.05rem;transition:.3s;border:1px solid transparent}
+.icobtn.mic{color:var(--mut);border-color:var(--line)}
+.icobtn.mic:hover{color:var(--ink);border-color:var(--line-2)}
+.icobtn.mic.rec{color:#ff8f8f;border-color:rgba(255,120,120,.5);animation:pulse 1.4s infinite}
+.icobtn.send{background:var(--grad);color:#06121A;font-weight:700}
+.chat-feats{display:grid;gap:14px}
+.chat-feat{display:flex;gap:14px;align-items:flex-start}
+.chat-feat>div:not(.ico){flex:1;min-width:0}
+.chat-feat .ico{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);font-size:1.2rem}
+.chat-feat b{display:block;font-weight:600;font-size:.97rem;margin-bottom:2px}
+.chat-feat p{color:var(--mut);font-size:.88rem;font-weight:300}
+@media (max-width:560px){
+  .chat-head{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    grid-template-areas:"ava who" "actions actions";
+    column-gap:12px;row-gap:8px;
+  }
+  .chat-ava{grid-area:ava}
+  .chat-head .who{grid-area:who;min-width:0}
+  .chat-head .who small{white-space:nowrap}
+  .chat-head-actions{grid-area:actions;display:flex;flex-wrap:nowrap;gap:8px;align-items:center;margin-left:0;justify-content:flex-start}
+  .left-chip{flex:none}
+  .tts-toggle{margin-left:0;flex:none}
+}
+@media (max-width:380px){
+  .chat-in{padding:5px 5px 5px 14px;gap:6px}
+  .icobtn{width:38px;height:38px;font-size:.95rem}
+  .chip{font-size:.76rem;padding:7px 12px}
+}
+
+/* mood */
+.moods{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:480px){.moods{grid-template-columns:repeat(2,1fr)}}
+.mood{
+  border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel);
+  padding:16px 8px;display:flex;flex-direction:column;align-items:center;gap:7px;
+  font-size:.86rem;font-weight:500;color:var(--mut);transition:.3s;
+}
+.mood em{font-style:normal;font-size:1.7rem}
+.mood:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.mood.sel{border-color:var(--teal);background:rgba(110,231,216,.09);color:var(--ink);box-shadow:0 0 0 1px var(--teal)}
+.mood-tip{
+  margin-top:18px;padding:16px 18px;border-radius:var(--r-md);font-size:.92rem;font-weight:300;
+  background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);color:var(--ink);
+  display:none;
+}
+.mood-tip.show{display:block;animation:msgin .5s var(--ease)}
+.week{display:flex;gap:10px;align-items:flex-end;height:150px;margin:22px 0 6px}
+.week .bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
+.week .fillwrap{width:100%;max-width:38px;height:100%;display:flex;align-items:flex-end;background:rgba(255,255,255,.05);border-radius:10px;overflow:hidden}
+.week .fill{width:100%;background:var(--grad);border-radius:10px;min-height:4px;transition:height 1s var(--ease)}
+.week small{font-size:.72rem;color:var(--dim);letter-spacing:.04em}
+.score{font-family:'Fraunces',serif;font-size:clamp(2.6rem,6vw,3.6rem);font-weight:600;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.insight{margin-top:20px;padding:16px 18px;border-radius:var(--r-md);background:var(--panel);border:1px solid var(--line);font-size:.9rem;color:var(--mut);font-weight:300}
+.insight b{color:var(--ink);font-weight:600}
+
+/* breathing */
+.breath-stage{display:flex;flex-direction:column;align-items:center;gap:26px;padding:14px 0}
+.borb-wrap{position:relative;width:min(64vw,280px);aspect-ratio:1;display:grid;place-items:center}
+.borb-ring{position:absolute;inset:0;transform:rotate(-90deg)}
+.borb-ring circle{fill:none;stroke-width:3}
+.borb-ring .track{stroke:rgba(255,255,255,.08)}
+.borb-ring .prog{stroke:url(#bgrad);stroke-linecap:round;transition:stroke-dashoffset .2s linear}
+.borb{
+  width:58%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.35),rgba(110,231,216,.55) 32%,rgba(167,139,250,.5) 70%,rgba(167,139,250,.15));
+  box-shadow:0 0 70px rgba(110,231,216,.35),inset 0 0 40px rgba(255,255,255,.14);
+  transition:transform .4s;display:grid;place-items:center;
+}
+.borb .phase{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;color:#04101A;text-shadow:0 1px 8px rgba(255,255,255,.35)}
+.bpatterns{display:grid;gap:12px}
+.bpat{
+  text-align:left;border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel);
+  padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:14px;transition:.3s;width:100%;
+}
+.bpat:hover{border-color:var(--line-2)}
+.bpat.sel{border-color:var(--vio);background:rgba(167,139,250,.09);box-shadow:0 0 0 1px var(--vio)}
+.bpat b{display:block;font-weight:600;font-size:.98rem}
+.bpat p{color:var(--mut);font-size:.84rem;font-weight:300;margin-top:2px}
+.bpat .seq{font-variant-numeric:tabular-nums;color:var(--teal);font-weight:600;font-size:.92rem;white-space:nowrap}
+.bstats{display:flex;gap:18px;align-items:center;color:var(--mut);font-size:.9rem}
+.bstats b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ============ SAFETY ============ */
+.safety-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+@media (max-width:760px){.safety-cols{grid-template-columns:1fr}}
+.slist{list-style:none;display:grid;gap:12px;margin-top:16px}
+.slist li{display:flex;gap:12px;font-size:.93rem;color:var(--mut);font-weight:300}
+.slist li::before{content:"✓";color:var(--teal);font-weight:700;flex:none}
+.slist.no li::before{content:"✕";color:#ff9a9a}
+.crisis{border:1px solid rgba(255,140,140,.3);background:rgba(255,110,110,.06)}
+.helplines{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:22px}
+.hl{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px}
+.hl b{display:flex;gap:8px;font-size:.95rem;margin-bottom:10px}
+.hl a{display:flex;justify-content:space-between;gap:10px;padding:7px 0;font-size:.88rem;color:var(--mut);border-top:1px solid var(--line)}
+.hl a span:first-child{flex:1;min-width:0;overflow-wrap:break-word}
+.hl a span:last-child{color:var(--teal);font-weight:600;white-space:nowrap}
+.hl a:hover span:last-child{text-decoration:underline}
+
+/* ============ PRICING ============ */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+@media (max-width:920px){.plans{grid-template-columns:1fr;max-width:460px;margin:0 auto}}
+.plan{position:relative;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px 26px;transition:.35s var(--ease)}
+.plan:hover{transform:translateY(-4px);border-color:var(--line-2)}
+.plan.hot{border-color:rgba(110,231,216,.5);background:linear-gradient(170deg,rgba(110,231,216,.08),rgba(167,139,250,.07))}
+.plan .flag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--grad);color:#06121A;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:99px;white-space:nowrap}
+.plan h3{font-size:1.2rem}
+.price{font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;margin:12px 0 2px}
+.price small{font-family:'Outfit';font-size:.85rem;color:var(--dim);font-weight:400}
+.plan ul{list-style:none;margin:20px 0 26px;display:grid;gap:10px;flex:1}
+.plan li{display:flex;gap:10px;font-size:.9rem;color:var(--mut);font-weight:300}
+.plan li::before{content:"✓";color:var(--teal);font-weight:700;flex:none}
+.plan li.off{opacity:.45}.plan li.off::before{content:"✕";color:var(--dim)}
+.plan .btn{width:100%}
+.pay-note{text-align:center;color:var(--dim);font-size:.82rem;margin-top:26px}
+
+/* ============ ABOUT ============ */
+.about-vals{display:grid;gap:14px;margin-top:26px}
+.about-vals div{display:flex;gap:12px;font-size:.95rem;color:var(--mut);font-weight:300}
+.about-vals div::before{content:"◆";color:var(--vio);font-size:.7rem;line-height:2;flex:none}
+.stats{display:flex;gap:clamp(18px,4vw,44px);margin-top:34px;flex-wrap:wrap}
+.stats b{font-family:'Fraunces',serif;font-size:clamp(1.8rem,4vw,2.4rem);font-weight:600;display:block;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stats small{color:var(--dim);font-size:.82rem;letter-spacing:.05em;text-transform:uppercase}
+
+/* ============ DASHBOARD ============ */
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+@media (max-width:920px){.dash-stats{grid-template-columns:repeat(2,1fr)}}
+.dstat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-md);padding:20px 18px;transition:.3s}
+.dstat:hover{border-color:var(--line-2)}
+.dstat small{display:flex;align-items:center;gap:7px;color:var(--dim);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.dstat b{font-family:'Fraunces',serif;font-size:clamp(1.7rem,4vw,2.3rem);font-weight:600;display:block;margin-top:8px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.1}
+.dstat span{color:var(--mut);font-size:.8rem;font-weight:300}
+.dash-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:18px}
+@media (max-width:920px){.dash-grid{grid-template-columns:1fr}}
+.dash-panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(18px,3vw,28px)}
+.dash-panel h3{font-size:1.05rem;margin-bottom:16px;display:flex;align-items:center;gap:9px}
+.trend-wrap{height:210px;position:relative}
+#trendCanvas{width:100%;height:100%}
+.dist{display:grid;gap:12px}
+.dist-row{display:grid;grid-template-columns:96px 1fr 30px;align-items:center;gap:10px;font-size:.86rem}
+.dist-row .dn{color:var(--mut);display:flex;gap:7px;align-items:center;white-space:nowrap}
+.dist-row .db{height:9px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.dist-row .db i{display:block;height:100%;border-radius:99px;background:var(--grad);width:0;transition:width 1s var(--ease)}
+.dist-row .dv{text-align:right;color:var(--dim);font-variant-numeric:tabular-nums;font-size:.8rem}
+.dash-empty{color:var(--dim);font-size:.88rem;font-weight:300;text-align:center;padding:30px 10px;line-height:1.6}
+.dash-tip{margin-top:18px;padding:15px 17px;border-radius:var(--r-md);background:rgba(110,231,216,.07);border:1px solid rgba(110,231,216,.22);font-size:.9rem;font-weight:300;color:var(--ink)}
+.dash-head-row{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:clamp(24px,4vw,40px)}
+.dash-head-row .lede{max-width:44ch}
+.dash-date{color:var(--dim);font-size:.85rem;white-space:nowrap;padding:9px 16px;border:1px solid var(--line);border-radius:99px;background:var(--panel)}
+
+
+/* ============ OVERFLOW SAFETY (mobile) ============ */
+h1,h2,h3,.lede,.msg,.dstat b,.card p,.chat-feat b,.chat-feat p{overflow-wrap:break-word}
+.msg{word-break:break-word}
+
+/* ============ LOADER ============ */
+#loader{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .6s var(--ease)}
+#loader.hide{opacity:0;pointer-events:none}
+#loader .lorb{width:64px;height:64px;border-radius:50%;background:var(--grad);box-shadow:0 0 50px rgba(110,231,216,.5);animation:pulse 1.6s ease-in-out infinite}
+#loader span{font-family:'Fraunces',serif;font-size:1.4rem;letter-spacing:.06em;color:var(--mut)}
+
+/* ============ TOAST ============ */
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:90;background:rgba(14,21,38,.95);border:1px solid var(--line-2);color:var(--ink);padding:13px 22px;border-radius:99px;font-size:.9rem;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.35s var(--ease);max-width:calc(100vw - 40px);text-align:center;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ============ MODAL ============ */
+.modal{position:fixed;inset:0;z-index:80;background:rgba(4,7,14,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex;animation:msgin .3s var(--ease)}
+.modal-card{background:linear-gradient(165deg,#111A30,#0B1120);border:1px solid var(--line-2);border-radius:26px;padding:clamp(24px,5vw,40px);max-width:460px;width:100%;max-height:88svh;overflow-y:auto;box-shadow:var(--shadow);position:relative;text-align:center}
+.modal-card h3{font-size:1.5rem;margin-bottom:10px}
+.modal-card p{color:var(--mut);font-size:.93rem;font-weight:300;margin-bottom:8px}
+.modal-x{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);color:var(--mut);font-size:1rem}
+.modal-x:hover{color:var(--ink);border-color:var(--line-2)}
+.modal-perks{list-style:none;text-align:left;margin:18px auto;display:grid;gap:9px;max-width:300px}
+.modal-perks li{display:flex;gap:10px;font-size:.9rem;color:var(--mut)}
+.modal-perks li::before{content:"✓";color:var(--teal);font-weight:700}
+.modal-note{font-size:.78rem!important;color:var(--dim)!important;margin-top:14px!important;line-height:1.5}
+.modal-card .btn{width:100%;margin-top:8px}
+
+/* ============ USAGE METER ============ */
+.usage-panel{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;margin-bottom:18px}
+.usage-info{flex:1;min-width:230px}
+.usage-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px}
+.usage-top b{font-size:.98rem;font-weight:600}
+.usage-top span{font-size:.82rem;color:var(--dim);font-variant-numeric:tabular-nums}
+.usage-bar{height:10px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.usage-bar i{display:block;height:100%;border-radius:99px;background:var(--grad);width:0%;transition:width .8s var(--ease)}
+.usage-bar i.warn{background:linear-gradient(90deg,#FFC2B4,#ff8f8f)}
+.plan-badge{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:99px;border:1px solid var(--line-2);color:var(--mut)}
+.plan-badge.pro{background:var(--grad);color:#06121A;border-color:transparent}
+.left-chip{font-size:.72rem;color:var(--dim);border:1px solid var(--line);border-radius:99px;padding:5px 10px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chat-head-actions{display:flex;gap:10px;align-items:center;margin-left:auto}
+.chat-head-actions .tts-toggle{margin-left:0}
+
+/* ============ JOURNAL ============ */
+.journal-in{width:100%;min-height:104px;resize:vertical;background:rgba(0,0,0,.25);border:1px solid var(--line-2);border-radius:var(--r-md);padding:14px 16px;font-size:16px;font-weight:300;color:var(--ink);outline:none;line-height:1.55}
+.journal-in:focus{border-color:var(--teal)}
+.j-entries{display:grid;gap:10px;margin-top:16px}
+.j-entry{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-md);padding:13px 15px;font-size:.88rem;font-weight:300;color:var(--mut)}
+.j-entry small{display:flex;justify-content:space-between;color:var(--dim);font-size:.72rem;margin-bottom:6px;letter-spacing:.04em}
+.j-entry small button{color:var(--dim);font-size:.72rem}
+.j-entry small button:hover{color:#ff9a9a}
+.j-entry p{color:var(--ink);white-space:pre-wrap;overflow-wrap:break-word}
+.affirm{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(1.15rem,2.6vw,1.45rem);line-height:1.5;color:var(--ink);padding:6px 0 14px}
+.affirm::before{content:"“";color:var(--teal);font-size:1.6em;line-height:0;vertical-align:-.3em;margin-right:4px}
+
+/* ============ FAQ ============ */
+.faq{max-width:760px;margin:0 auto;display:grid;gap:12px}
+.faq details{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;transition:border-color .3s}
+.faq details[open]{border-color:var(--line-2);background:var(--panel-2)}
+.faq summary{cursor:pointer;list-style:none;padding:18px 20px;font-weight:600;font-size:.98rem;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--teal);font-size:1.3rem;font-weight:400;transition:transform .3s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq .fa-body{padding:0 20px 18px;color:var(--mut);font-size:.92rem;font-weight:300;line-height:1.65}
+
+/* ============ BACK TO TOP ============ */
+#toTop{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:60;width:48px;height:48px;border-radius:50%;background:rgba(14,21,38,.9);border:1px solid var(--line-2);color:var(--ink);font-size:1.1rem;opacity:0;pointer-events:none;transition:.35s;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#toTop.show{opacity:1;pointer-events:auto}
+#toTop.kb-hide,#toTop.in-chat{opacity:0!important;pointer-events:none!important}
+#toTop:hover{border-color:var(--teal)}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--line);padding:56px 0 40px;position:relative;z-index:1;background:rgba(7,11,20,.6)}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:34px}
+@media (max-width:760px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:460px){.foot-grid{grid-template-columns:1fr}}
+footer h4{font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;font-weight:600}
+footer ul{list-style:none;display:grid;gap:10px}
+footer ul a{color:var(--mut);font-size:.9rem;font-weight:300;transition:color .25s}
+footer ul a:hover{color:var(--ink)}
+.foot-brand p{color:var(--mut);font-size:.9rem;font-weight:300;max-width:32ch;margin-top:12px}
+.foot-base{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;margin-top:44px;padding-top:22px;border-top:1px solid var(--line);color:var(--dim);font-size:.82rem}
+.foot-base nav{display:flex;gap:18px}
+.foot-base a:hover{color:var(--ink)}
+
+/* touch devices: disable tilt hover transforms */
+@media (hover:none){
+  .card:hover{transform:none}
+  .plan:hover{transform:none}
+}
+</style>
+</head>
+<body>
+<div id="loader" aria-hidden="true"><div class="lorb"></div><span>Aura</span></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<button id="toTop" aria-label="Back to top">↑</button>
+<div class="modal" id="upModal" role="dialog" aria-modal="true" aria-labelledby="upTitle">
+  <div class="modal-card">
+    <button class="modal-x" id="upClose" aria-label="Close">✕</button>
+    <h3 id="upTitle">Upgrade to Aura Pro</h3>
+    <p>Unlimited conversations, full analytics and every feature — for less than a coffee a week.</p>
+    <ul class="modal-perks">
+      <li>Unlimited AI chats every day</li>
+      <li>Full mood analytics &amp; CSV export</li>
+      <li>All breathing patterns &amp; soundscapes</li>
+      <li>Voice readback &amp; priority support</li>
+    </ul>
+    <button class="btn btn-pri" id="goPro">✨ Unlock Pro — demo</button>
+    <button class="btn btn-ghost" id="goFree" style="display:none">Switch back to Free</button>
+    <button class="btn btn-ghost" id="upLater">Maybe later</button>
+    <p class="modal-note">This is a live product demo — the button above simulates the Pro plan instantly so you can experience the full upgrade flow. In production it connects to Razorpay / Stripe checkout.</p>
+  </div>
+</div>
+<canvas id="bg3d" aria-hidden="true"></canvas>
+<div class="bg-fallback" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#top" aria-label="Aura AI home"><span class="logo-orb"></span>Aura</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#features">Features</a>
+      <a href="#soundscape">Soundscapes</a>
+      <a href="#chat">Talk to Aura</a>
+      <a href="#mood">Mood</a>
+      <a href="#breathing">Breathing</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#safety">Safety</a>
+      <a href="#faq">FAQ</a>
+      <a href="#pricing">Pricing</a>
+      <select class="lang-sel" id="langSel" aria-label="Language">
+        <option value="en">🌐 EN</option><option value="hi">हिन्दी</option>
+        <option value="ar">العربية</option><option value="ur">اردو</option>
+        <option value="es">Español</option><option value="fr">Français</option>
+      </select>
+      <a class="btn btn-pri" href="#chat" data-i18n="cta">Get Started</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mnav" id="mnav">
+  <a href="#features">Features</a>
+  <a href="#soundscape">Soundscapes</a>
+  <a href="#chat">Talk to Aura</a>
+  <a href="#mood">Mood Tracker</a>
+  <a href="#breathing">Breathing</a>
+  <a href="#dashboard">Dashboard</a>
+  <a href="#safety">Safety</a>
+  <a href="#faq">FAQ</a>
+  <a href="#pricing">Pricing</a>
+  <select class="lang-sel" id="langSelM" aria-label="Language" style="margin-top:10px">
+    <option value="en">🌐 English</option><option value="hi">हिन्दी</option>
+    <option value="ar">العربية</option><option value="ur">اردو</option>
+    <option value="es">Español</option><option value="fr">Français</option>
+  </select>
+  <a class="btn btn-pri" href="#chat" data-i18n="cta">Get Started</a>
+</div>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="hero-tag rv"><span class="dot"></span><span data-i18n="tag">Wellness-focused · Private · Multilingual</span></div>
+      <h1 class="rv" data-i18n-html="h1">A safe space for your <span class="h-em">thoughts, anytime.</span></h1>
+      <p class="lede rv" data-i18n="lede">Aura is a compassionate AI companion that truly listens, understands, and responds with genuine care. Talk, breathe, and track your wellbeing — in any language, on any device.</p>
+      <div class="hero-cta rv">
+        <a class="btn btn-pri" href="#chat">💬 <span data-i18n="talk">Talk to Aura</span></a>
+        <a class="btn btn-ghost" href="#soundscape">🎧 <span data-i18n="explore">Explore Soundscapes</span></a>
+      </div>
+      <div class="trust rv">
+        <span>🛡️ 100% Private &amp; Local</span>
+        <span>🌐 6 Languages</span>
+        <span>🍃 Instrument-Free Audio</span>
+        <span>🤝 Safety Guardrails</span>
+      </div>
+    </div>
+    <div class="hero-orbspace" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">What Aura offers</span>
+      <h2>Everything you need <span class="h-em">to feel heard</span></h2>
+      <p class="lede" style="margin-top:16px">A thoughtfully designed space that respects your faith, your privacy, and your emotions.</p>
+    </div>
+    <div class="grid3">
+      <div class="card rv tilt"><div class="ico">💬</div><h3>Empathetic AI Companion</h3><p>Talk or type freely. Aura listens without judgment, responds with care, and stays strictly within mental wellness — no off-topic detours.</p></div>
+      <div class="card rv tilt"><div class="ico">🌧️</div><h3>Natural Soundscapes</h3><p>Synthesized rainfall, wind, ocean and campfire — created mathematically in your browser. Zero music, zero instruments. Suitable for everyone.</p></div>
+      <div class="card rv tilt"><div class="ico">🫁</div><h3>Guided Breathing Coach</h3><p>Box breathing, focus breathing, and 4-7-8 sleep induction — all in complete silence. Clinically grounded, silent by design.</p></div>
+      <div class="card rv tilt"><div class="ico">📊</div><h3>Mood &amp; Wellness Tracker</h3><p>Log how you feel each day, get a personal recommendation, and watch your weekly wellness trends unfold in a simple visual chart.</p></div>
+      <div class="card rv tilt"><div class="ico">🎙️</div><h3>Voice Recognition</h3><p>Too drained to type? Simply speak. Aura converts your voice into text and can read her responses back in a calm, soothing tone.</p></div>
+      <div class="card rv tilt"><div class="ico">🔒</div><h3>Absolute Privacy</h3><p>Every conversation stays in your browser — never sent to a server, never stored externally. Your thoughts belong to you alone.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOUNDSCAPE ============ -->
+<section id="soundscape">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">Aura Wave</span>
+      <h2>Generative natural <span class="h-em">soundscapes</span></h2>
+      <p class="lede" style="margin-top:16px">Pure synthesized nature — no recordings, no instruments, no music. Just calming textures of rain, wind, ocean and fire, built from sound physics in real time.</p>
+    </div>
+    <div class="panel rv">
+      <div class="viz"><canvas id="vizCanvas" style="width:100%;height:100%"></canvas></div>
+      <div class="mix-row"><span class="lbl">🌧️ Rainfall</span><input type="range" id="sRain" min="0" max="100" value="0" aria-label="Rainfall volume"><span class="val" id="vRain">0%</span></div>
+      <div class="mix-row"><span class="lbl">🍃 Wind</span><input type="range" id="sWind" min="0" max="100" value="0" aria-label="Wind volume"><span class="val" id="vWind">0%</span></div>
+      <div class="mix-row"><span class="lbl">🌊 Ocean</span><input type="range" id="sOcean" min="0" max="100" value="0" aria-label="Ocean volume"><span class="val" id="vOcean">0%</span></div>
+      <div class="mix-row"><span class="lbl">🔥 Campfire</span><input type="range" id="sFire" min="0" max="100" value="0" aria-label="Campfire volume"><span class="val" id="vFire">0%</span></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px">
+        <button class="btn btn-pri" id="soundBtn">▶ Generate Soundscape</button>
+        <button class="btn btn-ghost" id="soundPreset">✨ Calm preset</button>
+      </div>
+      <p class="note">🛡️ All ambient textures are synthesized live using filtered-noise mathematics. No instruments, no songs — completely clean and safe for all listeners.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAT ============ -->
+<section id="chat">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">24/7 Companion</span>
+      <h2>Talk to Aura, <span class="h-em">anytime you need</span></h2>
+      <p class="lede" style="margin-top:16px">Aura listens without judgment. Whether you're anxious, burnt out, or just need someone — she's here.</p>
+    </div>
+    <div class="split">
+      <div class="chat-feats rv">
+        <div class="chat-feat"><div class="ico">🎙️</div><div><b>Voice input</b><p>Tap the mic to speak instead of type. Aura transcribes and responds.</p></div></div>
+        <div class="chat-feat"><div class="ico">🔊</div><div><b>Audio readback</b><p>Enable Aura to read her responses aloud in a calm, soothing voice.</p></div></div>
+        <div class="chat-feat"><div class="ico">🌐</div><div><b>6 native languages</b><p>Switch to Hindi, Arabic, Urdu, Spanish or French — Aura understands all.</p></div></div>
+        <div class="chat-feat"><div class="ico">🚨</div><div><b>Crisis detection</b><p>If you're in danger, Aura immediately surfaces crisis helpline numbers for your region.</p></div></div>
+      </div>
+      <div class="panel rv" id="chatPanel">
+        <div class="chat">
+          <div class="chat-head">
+            <div class="chat-ava">🌿</div>
+            <div class="who"><b>Aura AI Companion</b><small data-i18n="online">Always here for you</small></div>
+            <div class="chat-head-actions">
+            <span class="left-chip" id="leftChip">12 left today</span>
+            <button class="tts-toggle" id="ttsBtn">🔊 Read aloud</button>
+            </div>
+          </div>
+          <div class="chat-log" id="chatLog" aria-live="polite"></div>
+          <div class="chips" id="chips">
+            <button class="chip" data-say="I feel overwhelmed">😰 I feel overwhelmed</button>
+            <button class="chip" data-say="I can't sleep">😴 Can't sleep</button>
+            <button class="chip" data-say="I need help focusing">🧠 Need focus tips</button>
+            <button class="chip" data-say="I'm feeling anxious">💭 Feeling anxious</button>
+          </div>
+          <div class="chat-in">
+            <input id="chatInput" data-i18n-ph="ph" placeholder="Share what's on your mind…" autocomplete="off" maxlength="600" enterkeyhint="send" inputmode="text">
+            <button class="icobtn mic" id="micBtn" aria-label="Voice input">🎙️</button>
+            <button class="icobtn send" id="sendBtn" aria-label="Send">➤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MOOD ============ -->
+<section id="mood">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">Wellness Tracker</span>
+      <h2>How are you feeling <span class="h-em">today?</span></h2>
+      <p class="lede" style="margin-top:16px">A simple daily check-in that helps you understand your emotional patterns over time. Saved privately on your device.</p>
+    </div>
+    <div class="split" style="align-items:stretch">
+      <div class="panel rv">
+        <h3 style="margin-bottom:18px">Select your mood right now</h3>
+        <div class="moods" id="moods">
+          <button class="mood" data-m="calm" data-v="90"><em>😊</em>Calm</button>
+          <button class="mood" data-m="stressed" data-v="45"><em>😰</em>Stressed</button>
+          <button class="mood" data-m="focused" data-v="85"><em>🧠</em>Focused</button>
+          <button class="mood" data-m="tired" data-v="55"><em>😴</em>Tired</button>
+          <button class="mood" data-m="sad" data-v="40"><em>😢</em>Sad</button>
+          <button class="mood" data-m="grateful" data-v="95"><em>🤲</em>Grateful</button>
+        </div>
+        <div class="mood-tip" id="moodTip"></div>
+      </div>
+      <div class="panel rv">
+        <h3>Your weekly clarity score</h3>
+        <div class="week" id="weekChart"></div>
+        <div style="display:flex;align-items:baseline;gap:12px;margin-top:8px">
+          <span class="score" id="scoreVal">—</span>
+          <span style="color:var(--dim);font-size:.85rem">average this week</span>
+        </div>
+        <div class="insight" id="insight"><b>💡 Weekly insight:</b> log your first mood to start seeing patterns. Even one check-in a day builds a clearer picture of your week.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BREATHING ============ -->
+<section id="breathing">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">Breathing Coach</span>
+      <h2>Settle your nervous system <span class="h-em">in under a minute</span></h2>
+      <p class="lede" style="margin-top:16px">Clinically backed breathing patterns — in complete silence. No music, no sounds. Just your breath.</p>
+    </div>
+    <div class="split" style="align-items:center">
+      <div class="bpatterns rv">
+        <button class="bpat sel" data-p="4,4,4,4"><span><b>Box Breathing</b><p>Equal cycles for immediate calm. Perfect during stress or anxiety spikes.</p></span><span class="seq">4·4·4·4</span></button>
+        <button class="bpat" data-p="4,4,8,0"><span><b>Focus Breathing</b><p>Deep intake with long exhale to sharpen mental clarity and alertness.</p></span><span class="seq">4·4·8</span></button>
+        <button class="bpat" data-p="4,7,8,0"><span><b>Sleep Induction</b><p>The 4-7-8 pattern helps trigger melatonin naturally. Ideal before sleep.</p></span><span class="seq">4·7·8</span></button>
+        <p class="note">🤍 All exercises run in complete silence — no background audio of any kind.</p>
+      </div>
+      <div class="panel rv">
+        <div class="breath-stage">
+          <div class="borb-wrap">
+            <svg class="borb-ring" viewBox="0 0 100 100" aria-hidden="true">
+              <defs><linearGradient id="bgrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#6EE7D8"/><stop offset="100%" stop-color="#A78BFA"/>
+              </linearGradient></defs>
+              <circle class="track" cx="50" cy="50" r="46"></circle>
+              <circle class="prog" id="bprog" cx="50" cy="50" r="46" stroke-dasharray="289" stroke-dashoffset="289"></circle>
+            </svg>
+            <div class="borb" id="borb"><span class="phase" id="bphase">Ready</span></div>
+          </div>
+          <div class="bstats"><span>⏱ <b id="btime">0s</b></span><span>🔁 <b id="bcycles">0</b> cycles</span></div>
+          <button class="btn btn-pri" id="breathBtn">Start Breathing</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<section id="dashboard">
+  <div class="wrap">
+    <div class="sec-head rv" style="margin-bottom:0">
+      <span class="eyebrow">Your Dashboard</span>
+    </div>
+    <div class="dash-head-row rv">
+      <div>
+        <h2>Your wellness, <span class="h-em">at a glance</span></h2>
+        <p class="lede" style="margin-top:12px">Everything below is computed live from your own activity on this device — nothing leaves your browser.</p>
+      </div>
+      <span class="dash-date" id="dashDate">Today</span>
+    </div>
+    <div class="panel rv usage-panel" style="border-radius:22px">
+      <div class="usage-info">
+        <div class="usage-top"><b>⚡ Daily chat usage</b><span id="usageTxt">0 / 12 used · resets at midnight</span></div>
+        <div class="usage-bar"><i id="usageFill"></i></div>
+      </div>
+      <span class="plan-badge" id="planBadge">Free plan</span>
+      <button class="btn btn-pri" id="dashUpgrade" style="padding:11px 22px;font-size:.88rem">Upgrade</button>
+    </div>
+    <div class="dash-stats rv">
+      <div class="dstat"><small>🔥 Streak</small><b id="dsStreak">0</b><span>days in a row</span></div>
+      <div class="dstat"><small>📝 Check-ins</small><b id="dsTotal">0</b><span>moods logged</span></div>
+      <div class="dstat"><small>✨ Clarity</small><b id="dsAvg">—</b><span>7-day average</span></div>
+      <div class="dstat"><small>🫁 Breathing</small><b id="dsBreath">0m</b><span>total practiced</span></div>
+    </div>
+    <div class="dash-grid rv">
+      <div class="dash-panel">
+        <h3>📈 14-day mood trend</h3>
+        <div class="trend-wrap"><canvas id="trendCanvas"></canvas></div>
+      </div>
+      <div class="dash-panel">
+        <h3>🌈 Mood distribution</h3>
+        <div class="dist" id="distList"><div class="dash-empty">Log your first mood in the tracker above and your patterns will appear here. 🌿</div></div>
+        <div class="dash-tip" id="dashTip">💡 Tip: a single 60-second breathing session can measurably lower stress — try one today.</div>
+        <button class="btn btn-ghost" id="exportBtn" style="width:100%;margin-top:16px;padding:12px">⬇ Export mood data (CSV)</button>
+      </div>
+    </div>
+    <div class="dash-grid rv" style="margin-top:18px">
+      <div class="dash-panel">
+        <h3>📓 Private journal</h3>
+        <textarea class="journal-in" id="jIn" placeholder="Write a few honest lines about today… (saved only on this device)" maxlength="2000"></textarea>
+        <button class="btn btn-pri" id="jSave" style="margin-top:12px;padding:11px 24px;font-size:.9rem">Save entry</button>
+        <div class="j-entries" id="jList"></div>
+      </div>
+      <div class="dash-panel">
+        <h3>🌅 Affirmation of the day</h3>
+        <div class="affirm" id="affirm"></div>
+        <div class="dash-tip" style="margin-top:8px">Read it slowly, twice. Let it settle before you scroll on.</div>
+        <h3 style="margin-top:26px">🔔 Gentle reminders</h3>
+        <p style="color:var(--mut);font-size:.9rem;font-weight:300;line-height:1.65">Check in with your mood once a day, breathe for 60 seconds when stress spikes, and write one journal line before bed. Small rituals, compounded daily, are how calm is built.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head rv" style="text-align:center;margin-left:auto;margin-right:auto">
+      <span class="eyebrow" style="justify-content:center">FAQ</span>
+      <h2>Questions, <span class="h-em">answered</span></h2>
+    </div>
+    <div class="faq rv">
+      <details><summary>Is Aura really private?</summary><div class="fa-body">Yes. Your conversations, moods and journal entries are stored only in your own browser (localStorage) — nothing is sent to a server, and there are no trackers, ads or analytics scripts on this site.</div></details>
+      <details><summary>Is Aura a replacement for therapy?</summary><div class="fa-body">No. Aura is a wellness companion for everyday support — listening, breathing, mood awareness. It cannot diagnose or treat any condition, and it will always encourage professional help when a conversation suggests you need it.</div></details>
+      <details><summary>What happens if I run out of daily chats?</summary><div class="fa-body">The Free plan includes 12 chats per day, which reset at midnight. Pro removes the limit entirely. Crisis-related messages are never blocked by the limit — safety always comes first.</div></details>
+      <details><summary>Why is there no music in the soundscapes?</summary><div class="fa-body">Every ambient texture — rain, wind, ocean, campfire — is synthesized live from filtered-noise mathematics. No recordings, no instruments, no melodies. This keeps the audio clean, universally acceptable, and endlessly loopable.</div></details>
+      <details><summary>Which languages does Aura support?</summary><div class="fa-body">English, Hindi, Arabic, Urdu, Spanish and French — for the interface, chat greeting, voice input and audio readback. Right-to-left scripts are handled automatically.</div></details>
+      <details><summary>Does it work on my phone?</summary><div class="fa-body">Yes — the entire experience is built mobile-first and works on any modern phone, tablet or computer. If a device can't run the 3D background, Aura automatically switches to a lightweight version with zero errors.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about">
+  <div class="wrap split">
+    <div class="rv">
+      <span class="eyebrow">Our Story</span>
+      <h2>Built with purpose, <span class="h-em">grounded in values</span></h2>
+      <p class="lede" style="margin-top:18px">Aura was created out of a simple belief: <b style="color:var(--ink);font-weight:600">everyone deserves access to mental wellness support</b> — regardless of language, culture, or faith background.</p>
+      <p class="lede" style="margin-top:14px">Wellness apps often feel cold, clinical, or disconnected from real human emotion. They don't truly listen — they just respond. Aura was built to change that.</p>
+      <div class="about-vals">
+        <div>Designed with care, empathy, and genuine respect for every person</div>
+        <div>No advertising, no data harvesting, no third-party trackers</div>
+        <div>A companion, not a replacement for professional care</div>
+        <div>Open to all — regardless of faith or background</div>
+      </div>
+    </div>
+    <div class="panel rv" style="text-align:center;padding:clamp(32px,5vw,52px)">
+      <div class="logo" style="justify-content:center;font-size:1.8rem"><span class="logo-orb" style="width:34px;height:34px"></span>Aura AI</div>
+      <p style="color:var(--mut);font-weight:300;margin:14px auto 0;max-width:30ch">A safe space for your thoughts — built with care, for everyone.</p>
+      <div class="stats" style="justify-content:center">
+        <div><b>6</b><small>Languages</small></div>
+        <div><b>4</b><small>Core tools</small></div>
+        <div><b>0</b><small>Data collected</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SAFETY ============ -->
+<section id="safety">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">Safety &amp; Ethics</span>
+      <h2>Clear boundaries. <span class="h-em">Real care.</span></h2>
+      <p class="lede" style="margin-top:16px">Aura is a mental wellness companion — not a therapist. We're transparent about what we can and can't do.</p>
+    </div>
+    <div class="safety-cols">
+      <div class="panel rv">
+        <h3>✅ What Aura can do</h3>
+        <ul class="slist">
+          <li>Offer empathetic, active listening and comfort</li>
+          <li>Guide evidence-based breathing and relaxation exercises</li>
+          <li>Suggest sleep hygiene, organisation, and lifestyle tips</li>
+          <li>Track your mood and show weekly wellness patterns</li>
+          <li>Keep conversations fully private on your device</li>
+        </ul>
+      </div>
+      <div class="panel rv">
+        <h3>❌ What Aura cannot do</h3>
+        <ul class="slist no">
+          <li>Provide medical diagnoses or prescribe medication</li>
+          <li>Replace professional therapy or psychiatric care</li>
+          <li>Answer general knowledge or unrelated queries</li>
+          <li>Guarantee outcomes or clinical results</li>
+          <li>Ignore signs of crisis — safety always comes first</li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel crisis rv">
+      <h3>🚨 If you are in immediate danger</h3>
+      <p style="color:var(--mut);font-weight:300;margin-top:8px;font-size:.95rem">Please reach out to a free, confidential crisis service right now. You are not alone.</p>
+      <div class="helplines">
+        <div class="hl"><b>🇮🇳 India</b>
+          <a href="tel:+919999666555"><span>Vandrevala Foundation</span><span>+91 9999 666 555</span></a>
+          <a href="tel:18005990019"><span>KIRAN Helpline</span><span>1800-599-0019</span></a>
+        </div>
+        <div class="hl"><b>🇺🇸 United States</b>
+          <a href="tel:988"><span>Suicide &amp; Crisis Lifeline</span><span>Call/text 988</span></a>
+          <a href="sms:741741"><span>Crisis Text Line</span><span>Text HOME · 741741</span></a>
+        </div>
+        <div class="hl"><b>🇬🇧 United Kingdom</b>
+          <a href="tel:116123"><span>Samaritans UK</span><span>116 123</span></a>
+          <a href="tel:111"><span>NHS Mental Health</span><span>111</span></a>
+        </div>
+        <div class="hl"><b>🇨🇦 Canada</b>
+          <a href="tel:988"><span>Suicide Crisis Helpline</span><span>Call/text 988</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head rv" style="text-align:center;margin-left:auto;margin-right:auto">
+      <span class="eyebrow" style="justify-content:center">Pricing</span>
+      <h2>Choose your <span class="h-em">plan</span></h2>
+      <p class="lede" style="margin:16px auto 0">Start free. Upgrade when ready. Cancel anytime. No hidden fees.</p>
+    </div>
+    <div class="plans">
+      <div class="plan rv">
+        <h3>Free</h3>
+        <div class="price">₹0<small> / forever</small></div>
+        <ul>
+          <li>12 AI chats per day</li>
+          <li>Basic mood tracker</li>
+          <li>3 breathing exercises</li>
+          <li>Soundscapes</li>
+          <li class="off">Unlimited chats</li>
+          <li class="off">Full analytics</li>
+        </ul>
+        <button class="btn btn-ghost plan-btn" data-plan="free">✓ Current Plan</button>
+      </div>
+      <div class="plan hot rv">
+        <span class="flag">Most Popular</span>
+        <h3>Pro Monthly</h3>
+        <div class="price">₹299<small> / per month</small></div>
+        <ul>
+          <li>Unlimited AI chats</li>
+          <li>Full mood analytics</li>
+          <li>All breathing patterns</li>
+          <li>All soundscapes</li>
+          <li>Voice readback</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="btn btn-pri plan-btn" data-plan="pro">Get Pro Monthly</button>
+      </div>
+      <div class="plan rv">
+        <span class="flag" style="background:var(--panel-2);color:var(--teal);border:1px solid var(--line-2)">Save 30%</span>
+        <h3>Pro Yearly</h3>
+        <div class="price">₹2,499<small> / per year</small></div>
+        <ul>
+          <li>Everything in Pro Monthly</li>
+          <li>2 months free</li>
+          <li>Early access to features</li>
+          <li>Export mood data CSV</li>
+          <li>Dedicated support</li>
+        </ul>
+        <button class="btn btn-ghost plan-btn" data-plan="pro">Get Pro Yearly</button>
+      </div>
+    </div>
+    <p class="pay-note">🔒 Secure via Razorpay · 🌍 Works worldwide · ❤️ Cancel anytime · 🛡️ Privacy first</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="logo" href="#top"><span class="logo-orb"></span>Aura AI</a>
+        <p>A compassionate mental wellness companion. Private, multilingual, and designed for everyone, everywhere.</p>
+      </div>
+      <div><h4>Features</h4><ul>
+        <li><a href="#chat">Talk to Aura</a></li>
+        <li><a href="#soundscape">Soundscapes</a></li>
+        <li><a href="#mood">Mood Tracker</a></li>
+        <li><a href="#breathing">Breathing Coach</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+      </ul></div>
+      <div><h4>About</h4><ul>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#safety">Safety &amp; Ethics</a></li>
+        <li><a href="#features">What We Offer</a></li>
+      </ul></div>
+      <div><h4>Support</h4><ul>
+        <li><a href="#safety">Crisis Lines</a></li>
+        <li><a href="#chat">Talk to Aura</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul></div>
+    </div>
+    <div class="foot-base">
+      <span>© 2026 Aura AI. Built with care, for everyone. All conversations stay in your browser.</span>
+      <nav><a href="#safety">Privacy</a><a href="#safety">Safety</a><a href="#about">About</a></nav>
+    </div>
+  </div>
+</footer>
+<style>section{scroll-margin-top:78px}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" onerror="document.body.classList.add('no3d')"></script>
+<script>
+(function(){
+"use strict";
+var $=function(s,c){return (c||document).querySelector(s)};
+var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ============ NAV ============ */
+var nav=$('#nav'),burger=$('#burger'),mnav=$('#mnav');
+function onScroll(){nav.classList.toggle('scrolled',window.scrollY>24)}
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+burger.addEventListener('click',function(){
+  var open=mnav.classList.toggle('open');
+  burger.classList.toggle('open',open);
+  burger.setAttribute('aria-expanded',open);
+  document.body.style.overflow=open?'hidden':'';
+});
+$$('a',mnav).forEach(function(a){a.addEventListener('click',function(){
+  mnav.classList.remove('open');burger.classList.remove('open');document.body.style.overflow='';
+})});
+
+/* ============ REVEAL ============ */
+if('IntersectionObserver' in window && !reduced){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+  })},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  $$('.rv').forEach(function(el){io.observe(el)});
+}else{$$('.rv').forEach(function(el){el.classList.add('in')})}
+
+/* ============ CARD TILT (fine pointers only) ============ */
+if(window.matchMedia('(hover:hover) and (pointer:fine)').matches && !reduced){
+  $$('.tilt').forEach(function(card){
+    card.addEventListener('mousemove',function(e){
+      var r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+      card.style.transform='perspective(800px) rotateX('+((.5-y)*7)+'deg) rotateY('+((x-.5)*9)+'deg) translateY(-3px)';
+      card.style.setProperty('--mx',(x*100)+'%');card.style.setProperty('--my',(y*100)+'%');
+    });
+    card.addEventListener('mouseleave',function(){card.style.transform=''});
+  });
+}
+
+/* ============ SLIDER FILL ============ */
+$$('input[type=range]').forEach(function(r){
+  var f=function(){r.style.setProperty('--fill',(r.value/r.max*100)+'%')};
+  r.addEventListener('input',f);f();
+});
+
+/* ============ 3D BACKGROUND ============ */
+(function(){
+  if(typeof THREE==='undefined'||reduced){document.body.classList.add('no3d');return}
+  var canvas=$('#bg3d'),renderer;
+  try{renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true,powerPreference:'low-power'})}
+  catch(e){document.body.classList.add('no3d');return}
+  var isMobile=Math.min(window.innerWidth,window.innerHeight)<700||('ontouchstart' in window&&window.innerWidth<900);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,isMobile?1.5:2));
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(45,1,.1,100);
+  camera.position.z=7;
+
+  /* stars */
+  var starN=isMobile?320:850,pos=new Float32Array(starN*3);
+  for(var i=0;i<starN;i++){pos[i*3]=(Math.random()-.5)*30;pos[i*3+1]=(Math.random()-.5)*20;pos[i*3+2]=-4-Math.random()*14}
+  var starGeo=new THREE.BufferGeometry();
+  starGeo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  var stars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0x9db7d8,size:.035,transparent:true,opacity:.6,sizeAttenuation:true}));
+  scene.add(stars);
+
+  /* breathing aura orb */
+  var uni={
+    uTime:{value:0},uBreath:{value:1},uOpacity:{value:1},
+    cA:{value:new THREE.Color(0x6EE7D8)},cB:{value:new THREE.Color(0xA78BFA)}
+  };
+  var orbMat=new THREE.ShaderMaterial({
+    uniforms:uni,transparent:true,
+    vertexShader:[
+      'uniform float uTime;uniform float uBreath;',
+      'varying vec3 vN;varying vec3 vP;',
+      'vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}',
+      'vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}',
+      'vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}',
+      'vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}',
+      'float snoise(vec3 v){',
+      'const vec2 C=vec2(1.0/6.0,1.0/3.0);const vec4 D=vec4(0.0,0.5,1.0,2.0);',
+      'vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);',
+      'vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.0-g;vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);',
+      'vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;',
+      'i=mod289(i);',
+      'vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));',
+      'float n_=0.142857142857;vec3 ns=n_*D.wyz-D.xzx;',
+      'vec4 j=p-49.0*floor(p*ns.z*ns.z);',
+      'vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.0*x_);',
+      'vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.0-abs(x)-abs(y);',
+      'vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);',
+      'vec4 s0=floor(b0)*2.0+1.0;vec4 s1=floor(b1)*2.0+1.0;vec4 sh=-step(h,vec4(0.0));',
+      'vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;',
+      'vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);',
+      'vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));',
+      'p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;',
+      'vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);m=m*m;',
+      'return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));}',
+      'void main(){',
+      'float n=snoise(normal*1.6+uTime*0.25)*0.22;',
+      'vec3 np=position+normal*n;np*=uBreath;',
+      'vN=normalize(normalMatrix*normal);',
+      'vec4 mv=modelViewMatrix*vec4(np,1.0);vP=mv.xyz;',
+      'gl_Position=projectionMatrix*mv;}'
+    ].join('\n'),
+    fragmentShader:[
+      'uniform vec3 cA;uniform vec3 cB;uniform float uOpacity;uniform float uTime;',
+      'varying vec3 vN;varying vec3 vP;',
+      'void main(){',
+      'vec3 V=normalize(-vP);',
+      'float fres=pow(1.0-max(dot(normalize(vN),V),0.0),2.2);',
+      'float sweep=0.5+0.5*sin(uTime*0.4+vP.y*1.5);',
+      'vec3 col=mix(cA,cB,sweep);',
+      'vec3 core=mix(col*0.20,col,fres);',
+      'float a=(0.16+fres*0.9)*uOpacity;',
+      'gl_FragColor=vec4(core+fres*0.45,a);}'
+    ].join('\n')
+  });
+  var orb=new THREE.Mesh(new THREE.IcosahedronGeometry(1.55,isMobile?4:5),orbMat);
+  var halo=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,3),new THREE.MeshBasicMaterial({color:0x6EE7D8,wireframe:true,transparent:true,opacity:.05}));
+  var group=new THREE.Group();group.add(orb);group.add(halo);scene.add(group);
+
+  var mx=0,my=0,tx=0,ty=0;
+  window.addEventListener('pointermove',function(e){
+    tx=(e.clientX/window.innerWidth-.5);ty=(e.clientY/window.innerHeight-.5);
+  },{passive:true});
+
+  function layout(){
+    var w=window.innerWidth,h=window.innerHeight;
+    renderer.setSize(w,h,false);
+    camera.aspect=w/h;camera.updateProjectionMatrix();
+    if(w>880){group.position.set(2.15,0,0);group.scale.setScalar(1);}
+    else{group.position.set(0,1.15,0);group.scale.setScalar(.72);}
+  }
+  layout();window.addEventListener('resize',layout);
+  window.addEventListener('orientationchange',function(){setTimeout(layout,300)});
+
+  var hero=$('.hero'),clock=new THREE.Clock(),hidden=false;
+  document.addEventListener('visibilitychange',function(){hidden=document.hidden});
+  function tick(){
+    requestAnimationFrame(tick);
+    if(hidden)return;
+    var t=clock.getElapsedTime();
+    uni.uTime.value=t;
+    uni.uBreath.value=1+Math.sin(t*0.55)*0.06;
+    mx+=(tx-mx)*.04;my+=(ty-my)*.04;
+    group.rotation.y=t*.12+mx*.5;
+    group.rotation.x=my*.3;
+    stars.rotation.y=t*.008;
+    stars.position.x=-mx*.6;stars.position.y=my*.4;
+    var fade=1-Math.min(1,window.scrollY/Math.max(1,hero.offsetHeight*.85));
+    var mob=window.innerWidth<=880;
+    uni.uOpacity.value=(mob?.5:1)*fade;
+    halo.material.opacity=.05*fade;
+    halo.rotation.y=-t*.05;
+    renderer.render(scene,camera);
+  }
+  tick();
+})();
+
+/* ============ I18N ============ */
+var I18N={
+  en:{cta:'Get Started',tag:'Wellness-focused · Private · Multilingual',h1:'A safe space for your <span class="h-em">thoughts, anytime.</span>',lede:'Aura is a compassionate AI companion that truly listens, understands, and responds with genuine care. Talk, breathe, and track your wellbeing — in any language, on any device.',talk:'Talk to Aura',explore:'Explore Soundscapes',online:'Always here for you',ph:"Share what's on your mind…",greet:"Hello — I'm Aura, your safe private space. 🌿 I'm here to listen and support you. How are you feeling right now?"},
+  hi:{cta:'शुरू करें',tag:'वेलनेस-केंद्रित · निजी · बहुभाषी',h1:'आपके विचारों के लिए <span class="h-em">एक सुरक्षित जगह।</span>',lede:'Aura एक संवेदनशील AI साथी है जो सच में सुनता है, समझता है और परवाह से जवाब देता है। किसी भी भाषा में बात करें, सांस लें और अपनी सेहत ट्रैक करें।',talk:'Aura से बात करें',explore:'साउंडस्केप सुनें',online:'हमेशा आपके साथ',ph:'अपने मन की बात लिखें…',greet:'नमस्ते — मैं Aura हूँ। यह आपके लिए बनाई गई एक सुरक्षित, निजी जगह है। 🌿\n\nआप अभी कैसा महसूस कर रहे हैं?'},
+  ar:{cta:'ابدأ الآن',tag:'خصوصية تامة · متعدد اللغات',h1:'مساحة آمنة <span class="h-em">لأفكارك، في أي وقت.</span>',lede:'Aura رفيق ذكاء اصطناعي حنون يستمع إليك حقًا ويفهمك ويرد باهتمام صادق. تحدث وتنفّس وتابع صحتك النفسية بأي لغة.',talk:'تحدث مع Aura',explore:'استكشف الأصوات',online:'هنا دائمًا من أجلك',ph:'شارك ما يدور في ذهنك…',greet:'مرحبًا — أنا Aura. هذه مساحة آمنة وخاصة صُممت من أجلك. 🌿\n\nكيف تشعر الآن؟'},
+  ur:{cta:'شروع کریں',tag:'نجی · کثیر اللسانی',h1:'آپ کے خیالات کے لیے <span class="h-em">ایک محفوظ جگہ۔</span>',lede:'Aura ایک ہمدرد AI ساتھی ہے جو واقعی سنتا ہے، سمجھتا ہے اور خلوص سے جواب دیتا ہے۔ کسی بھی زبان میں بات کریں، سانس لیں اور اپنی صحت کا خیال رکھیں۔',talk:'Aura سے بات کریں',explore:'ساؤنڈ اسکیپس',online:'ہمیشہ آپ کے ساتھ',ph:'اپنے دل کی بات لکھیں…',greet:'السلام علیکم — میں Aura ہوں۔ یہ آپ کے لیے ایک محفوظ اور نجی جگہ ہے۔ 🌿\n\nآپ اس وقت کیسا محسوس کر رہے ہیں؟'},
+  es:{cta:'Empezar',tag:'Bienestar · Privado · Multilingüe',h1:'Un espacio seguro para <span class="h-em">tus pensamientos.</span>',lede:'Aura es una compañera de IA compasiva que realmente escucha, comprende y responde con cuidado genuino. Habla, respira y registra tu bienestar en cualquier idioma.',talk:'Habla con Aura',explore:'Explorar sonidos',online:'Siempre aquí para ti',ph:'Comparte lo que piensas…',greet:'Hola — soy Aura. Este es un espacio seguro y privado diseñado para ti. 🌿\n\n¿Cómo te sientes ahora mismo?'},
+  fr:{cta:'Commencer',tag:'Bien-être · Privé · Multilingue',h1:'Un espace sûr pour <span class="h-em">vos pensées.</span>',lede:"Aura est une compagne IA bienveillante qui écoute vraiment, comprend et répond avec une attention sincère. Parlez, respirez et suivez votre bien-être dans n'importe quelle langue.",talk:'Parler à Aura',explore:'Explorer les sons',online:'Toujours là pour vous',ph:'Partagez ce qui vous préoccupe…',greet:"Bonjour — je suis Aura. Ceci est un espace sûr et privé conçu pour vous. 🌿\n\nComment vous sentez-vous en ce moment ?"}
+};
+var LANG='en';
+var langSel=$('#langSel');
+function applyLang(l){
+  LANG=I18N[l]?l:'en';var d=I18N[LANG];
+  document.documentElement.lang=LANG;
+  $$('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');if(d[k])el.textContent=d[k]});
+  $$('[data-i18n-html]').forEach(function(el){var k=el.getAttribute('data-i18n-html');if(d[k])el.innerHTML=d[k]});
+  $$('[data-i18n-ph]').forEach(function(el){var k=el.getAttribute('data-i18n-ph');if(d[k])el.placeholder=d[k]});
+  var rtl=(LANG==='ar'||LANG==='ur');
+  $('.hero-copy').dir=rtl?'rtl':'ltr';
+}
+var langSelM=$('#langSelM');
+function onLang(v){applyLang(v);langSel.value=v;if(langSelM)langSelM.value=v;resetGreeting()}
+langSel.addEventListener('change',function(){onLang(langSel.value)});
+if(langSelM)langSelM.addEventListener('change',function(){onLang(langSelM.value)});
+
+/* ============ SOUNDSCAPE ============ */
+var AC=window.AudioContext||window.webkitAudioContext;
+var sctx=null,master=null,analyser=null,layers={},fireTimer=null,playing=false;
+var soundBtn=$('#soundBtn');
+function makeNoise(ctx){
+  var len=ctx.sampleRate*2,buf=ctx.createBuffer(1,len,ctx.sampleRate),d=buf.getChannelData(0);
+  for(var i=0;i<len;i++)d[i]=Math.random()*2-1;
+  return buf;
+}
+function layer(ctx,noise,setup){
+  var src=ctx.createBufferSource();src.buffer=noise;src.loop=true;
+  var g=ctx.createGain();g.gain.value=0;
+  var out=setup(src,g);src.start();
+  return {gain:g,out:out};
+}
+function initAudio(){
+  if(sctx||!AC)return !!sctx;
+  try{
+    sctx=new AC();
+    master=sctx.createGain();master.gain.value=.9;
+    analyser=sctx.createAnalyser();analyser.fftSize=128;
+    master.connect(analyser);analyser.connect(sctx.destination);
+    var noise=makeNoise(sctx);
+    layers.rain=layer(sctx,noise,function(src,g){
+      var hp=sctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=500;
+      var lp=sctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6500;
+      src.connect(hp);hp.connect(lp);lp.connect(g);g.connect(master);
+    });
+    layers.wind=layer(sctx,noise,function(src,g){
+      var lp=sctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=320;lp.Q.value=1.4;
+      var lfo=sctx.createOscillator();lfo.frequency.value=.12;
+      var depth=sctx.createGain();depth.gain.value=170;
+      lfo.connect(depth);depth.connect(lp.frequency);lfo.start();
+      src.connect(lp);lp.connect(g);g.connect(master);
+    });
+    layers.ocean=layer(sctx,noise,function(src,g){
+      var lp=sctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=650;
+      var swell=sctx.createGain();swell.gain.value=.6;
+      var lfo=sctx.createOscillator();lfo.frequency.value=.08;
+      var depth=sctx.createGain();depth.gain.value=.4;
+      lfo.connect(depth);depth.connect(swell.gain);lfo.start();
+      src.connect(lp);lp.connect(swell);swell.connect(g);g.connect(master);
+    });
+    layers.fire=layer(sctx,noise,function(src,g){
+      var lp=sctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=420;
+      src.connect(lp);lp.connect(g);g.connect(master);
+    });
+    /* fire crackles */
+    var noiseBuf=noise;
+    fireTimer=setInterval(function(){
+      if(!playing)return;
+      var lvl=+($('#sFire').value)/100;if(lvl<=0)return;
+      if(Math.random()>.55)return;
+      var b=sctx.createBufferSource();b.buffer=noiseBuf;
+      var bp=sctx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=2200+Math.random()*2500;bp.Q.value=8;
+      var cg=sctx.createGain();
+      var t=sctx.currentTime;
+      cg.gain.setValueAtTime(0,t);
+      cg.gain.linearRampToValueAtTime(lvl*(.25+Math.random()*.4),t+.005);
+      cg.gain.exponentialRampToValueAtTime(.0001,t+.06+Math.random()*.05);
+      b.connect(bp);bp.connect(cg);cg.connect(master);
+      b.start(t);b.stop(t+.15);
+    },130);
+    return true;
+  }catch(e){sctx=null;return false}
+}
+function setLevels(){
+  if(!sctx)return;
+  var t=sctx.currentTime;
+  var map={rain:'#sRain',wind:'#sWind',ocean:'#sOcean',fire:'#sFire'};
+  var scale={rain:.55,wind:.8,ocean:.7,fire:.5};
+  Object.keys(map).forEach(function(k){
+    layers[k].gain.gain.setTargetAtTime((+$(map[k]).value/100)*scale[k],t,.12);
+  });
+}
+['sRain','sWind','sOcean','sFire'].forEach(function(id,i){
+  var vids=['vRain','vWind','vOcean','vFire'];
+  $('#'+id).addEventListener('input',function(){
+    $('#'+vids[i]).textContent=this.value+'%';
+    if(playing)setLevels();
+  });
+});
+function togglePlay(force){
+  if(!initAudio()){soundBtn.textContent='Audio unavailable in this browser';return}
+  playing=(force!==undefined)?force:!playing;
+  if(playing){
+    sctx.resume();
+    if(['sRain','sWind','sOcean','sFire'].every(function(id){return +$('#'+id).value===0})){
+      $('#sRain').value=45;$('#vRain').textContent='45%';
+      $('#sWind').value=20;$('#vWind').textContent='20%';
+      $$('input[type=range]').forEach(function(r){r.style.setProperty('--fill',(r.value/r.max*100)+'%')});
+    }
+    setLevels();soundBtn.textContent='⏸ Pause Soundscape';
+  }else{
+    Object.keys(layers).forEach(function(k){layers[k].gain.gain.setTargetAtTime(0,sctx.currentTime,.08)});
+    soundBtn.textContent='▶ Generate Soundscape';
+  }
+}
+soundBtn.addEventListener('click',function(){togglePlay()});
+$('#soundPreset').addEventListener('click',function(){
+  var v={sRain:55,sWind:25,sOcean:35,sFire:12},lbl={sRain:'vRain',sWind:'vWind',sOcean:'vOcean',sFire:'vFire'};
+  Object.keys(v).forEach(function(id){$('#'+id).value=v[id];$('#'+lbl[id]).textContent=v[id]+'%';
+    $('#'+id).style.setProperty('--fill',v[id]+'%')});
+  togglePlay(true);
+});
+
+/* visualizer */
+(function(){
+  var cv=$('#vizCanvas'),cx=cv&&cv.getContext?cv.getContext('2d'):null,t0=0;
+  if(!cx)return;
+  function size(){var r=cv.parentElement.getBoundingClientRect();cv.width=r.width*(window.devicePixelRatio||1);cv.height=r.height*(window.devicePixelRatio||1)}
+  size();window.addEventListener('resize',size);
+  function draw(ts){
+    requestAnimationFrame(draw);
+    if(document.hidden)return;
+    t0=ts/1000;
+    var W=cv.width,H=cv.height;
+    cx.clearRect(0,0,W,H);
+    var grad=cx.createLinearGradient(0,0,W,0);
+    grad.addColorStop(0,'#6EE7D8');grad.addColorStop(1,'#A78BFA');
+    if(playing&&analyser){
+      var data=new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(data);
+      var n=48,bw=W/n;
+      cx.fillStyle=grad;
+      for(var i=0;i<n;i++){
+        var v=data[Math.floor(i*data.length/n)]/255;
+        var h=Math.max(3,v*H*.85);
+        cx.globalAlpha=.35+v*.6;
+        cx.fillRect(i*bw+bw*.18,(H-h)/2,bw*.64,h);
+      }
+      cx.globalAlpha=1;
+    }else{
+      cx.strokeStyle=grad;cx.lineWidth=2*(window.devicePixelRatio||1);cx.globalAlpha=.55;
+      cx.beginPath();
+      for(var x=0;x<=W;x+=4){
+        var y=H/2+Math.sin(x/W*6+t0*1.4)*H*.14*Math.sin(t0*.7+x/W*2);
+        x===0?cx.moveTo(x,y):cx.lineTo(x,y);
+      }
+      cx.stroke();cx.globalAlpha=1;
+    }
+  }
+  requestAnimationFrame(draw);
+})();
+
+/* ============ CHAT ============ */
+var chatLog=$('#chatLog'),chatInput=$('#chatInput'),ttsOn=false;
+chatInput.setAttribute('dir','auto');
+var CRISIS=['suicide','kill myself','end my life','want to die','wanna die','self harm','self-harm','hurt myself','no reason to live','end it all','khudkushi','خودکشی','आत्महत्या','suicidio'];
+var R={
+  crisis:"I'm really glad you told me, and I'm concerned about you. You deserve support from a real person right now. 💛\n\nPlease reach out to a free, confidential helpline:\n🇮🇳 India — Vandrevala: +91 9999 666 555 · KIRAN: 1800-599-0019\n🇺🇸 US — Call or text 988\n🇬🇧 UK — Samaritans: 116 123\n\nYou are not alone, and this feeling can pass. Would you like to try a slow breathing exercise together while you reach out?",
+  overwhelm:["That sounds like a lot to carry, and it makes complete sense that you feel overwhelmed. Let's shrink it down together: what is the *one* smallest thing on your mind right now? Just one — we'll start there. 🌿","Feeling overwhelmed usually means you care deeply about many things at once. Try this with me: name three things you can see around you right now. It gently anchors your mind back to the present."],
+  sleep:["Struggling to sleep is exhausting in itself. A calm wind-down helps: dim your screen, and try the 4-7-8 breathing pattern in the Breathing section below — it's designed to trigger natural drowsiness. 😴","When sleep won't come, chasing it makes it worse. Instead, try releasing tension: unclench your jaw, drop your shoulders, and take one long slow exhale. Want me to guide you to the sleep breathing exercise?"],
+  anxious:["Anxiety can feel like a storm inside, but storms pass. Right now, try one slow breath with me — in for 4, hold for 4, out for 4. Your body listens to your breath before it listens to your thoughts. 💙","Thank you for naming it — that's already a brave step. Anxiety often shrinks when we ground ourselves: feel your feet on the floor, notice the temperature of the air. You're safe in this moment."],
+  focus:["When focus slips, the kindest fix is structure: pick one task, set a 15-minute window, and silence everything else. The Focus Breathing pattern (4-4-8) below also sharpens alertness beautifully. 🧠","Scattered focus is often a tired mind asking for rhythm. Try a short focused-breathing session, then work in one small sprint. Small wins rebuild momentum fast."],
+  sad:["I'm sorry you're feeling this heaviness. You don't have to explain or justify it — sadness deserves space too. I'm here, and I'm listening. Would you like to talk about what's weighing on you, or would a calming soundscape help right now? 💜","That sounds painful, and I want you to know your feelings are completely valid. Sometimes just being heard helps a little. What's been the hardest part of today?"],
+  grateful:["That's beautiful. 🌸 Gratitude is one of the strongest anchors for wellbeing — savor it for a moment. What's one small thing that made you feel this way today?","I love that. Holding onto grateful moments actually trains the mind toward calm. Thank you for sharing it with me."],
+  stress:["Stress is your body trying to protect you — but it doesn't have to run the show. Let's release a little of it: drop your shoulders, unclench your hands, and take one long exhale. Better? Even 1% counts. 🍃","That pressure sounds real. One thing that helps: separate what's in your control from what isn't, and give your energy only to the first list. Want to talk through what's on yours?"],
+  angry:["Anger is valid — it usually guards something that matters to you. Before acting on it, try one slow breath and name what feels unfair. Naming it takes away half its heat. 🔥→🍃"],
+  greet:["It's good to see you. 🌿 This is your space — no judgment, no pressure. How are you feeling right now?","Hello, friend. I'm here and listening. What's on your mind today?"],
+  fallback:["Thank you for sharing that with me. I'm listening — tell me more about how that's been making you feel. 🌿","I hear you. That sounds important. What do you think is sitting underneath that feeling?","I'm here with you. Sometimes putting things into words is the first step to lightening them. What else is on your mind?"]
+};
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function addMsg(text,cls){
+  var m=document.createElement('div');
+  m.className='msg '+cls;
+  m.textContent=text;
+  chatLog.appendChild(m);
+  chatLog.scrollTop=chatLog.scrollHeight;
+  return m;
+}
+function speak(text){
+  if(!ttsOn||!('speechSynthesis' in window))return;
+  try{
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(text.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu,''));
+    var langs={en:'en-US',hi:'hi-IN',ar:'ar-SA',ur:'ur-PK',es:'es-ES',fr:'fr-FR'};
+    u.lang=langs[LANG]||'en-US';u.rate=.95;u.pitch=1.05;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+function respond(input){
+  var low=input.toLowerCase();
+  var isCrisis=CRISIS.some(function(k){return low.indexOf(k)>-1});
+  var reply,cls='ai';
+  if(isCrisis){reply=R.crisis;cls='ai crisis'}
+  else if(/overwhelm|too much|burn(t|ed)? ?out|can'?t cope/.test(low))reply=pick(R.overwhelm);
+  else if(/sleep|insomnia|awake|tired at night|can'?t rest/.test(low))reply=pick(R.sleep);
+  else if(/anxi|panic|nervous|worry|worried|scared|afraid/.test(low))reply=pick(R.anxious);
+  else if(/focus|concentrat|distract|procrastinat/.test(low))reply=pick(R.focus);
+  else if(/sad|depress|lonely|alone|cry|empty|hopeless|down/.test(low))reply=pick(R.sad);
+  else if(/grateful|thank|blessed|alhamdulillah|shukr/.test(low))reply=pick(R.grateful);
+  else if(/stress|pressure|deadline|exam/.test(low))reply=pick(R.stress);
+  else if(/angry|furious|frustrat|annoyed|mad/.test(low))reply=pick(R.angry);
+  else if(/^(hi|hey|hello|salaam|assalam|namaste|hola|bonjour|yo)\b/.test(low))reply=pick(R.greet);
+  else reply=pick(R.fallback);
+  var tp=document.createElement('div');
+  tp.className='msg ai typing';tp.innerHTML='<i></i><i></i><i></i>';
+  chatLog.appendChild(tp);chatLog.scrollTop=chatLog.scrollHeight;
+  setTimeout(function(){
+    tp.remove();
+    if(isCrisis){addCrisisMsg();speak(reply);}
+    else{addMsg(reply,cls);speak(reply);}
+  },800+Math.random()*700);
+}
+function isCrisisText(v){
+  var low=v.toLowerCase();
+  return CRISIS.some(function(k){return low.indexOf(k)>-1});
+}
+function send(){
+  var v=chatInput.value.trim();
+  if(!v)return;
+  var crisis=isCrisisText(v);
+  if(!crisis && chatsLeft()<=0){
+    addMsg(v,'me');chatInput.value='';
+    addLimitMsg();
+    return;
+  }
+  addMsg(v,'me');
+  chatInput.value='';
+  if(!crisis)consumeChat();
+  respond(v);
+}
+$('#sendBtn').addEventListener('click',send);
+chatInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();send()}});
+$$('.chip').forEach(function(c){c.addEventListener('click',function(){
+  chatInput.value=c.getAttribute('data-say');send();
+})});
+$('#ttsBtn').addEventListener('click',function(){
+  if(!('speechSynthesis' in window)){this.textContent='🔇 Not supported';return}
+  ttsOn=!ttsOn;this.classList.toggle('on',ttsOn);
+  this.textContent=ttsOn?'🔊 Reading aloud':'🔊 Read aloud';
+  if(!ttsOn)window.speechSynthesis.cancel();
+});
+/* voice input */
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,recOn=false;
+var micBtn=$('#micBtn');
+micBtn.addEventListener('click',function(){
+  if(!SR){addMsg("Voice input isn't supported in this browser — but typing works perfectly. 🌿",'ai');return}
+  if(recOn){try{rec.stop()}catch(e){}return}
+  try{
+    rec=new SR();
+    var langs={en:'en-US',hi:'hi-IN',ar:'ar-SA',ur:'ur-PK',es:'es-ES',fr:'fr-FR'};
+    rec.lang=langs[LANG]||'en-US';rec.interimResults=false;
+    rec.onstart=function(){recOn=true;micBtn.classList.add('rec')};
+    rec.onend=function(){recOn=false;micBtn.classList.remove('rec')};
+    rec.onerror=function(){recOn=false;micBtn.classList.remove('rec')};
+    rec.onresult=function(e){
+      var t=e.results[0][0].transcript;
+      chatInput.value=t;send();
+    };
+    rec.start();
+  }catch(e){addMsg("I couldn't access the microphone. Typing works just as well. 🌿",'ai')}
+});
+function resetGreeting(){
+  chatLog.innerHTML='';
+  addMsg((I18N[LANG]||I18N.en).greet,'ai');
+}
+resetGreeting();
+
+/* ============ MOOD TRACKER ============ */
+var TIPS={
+  calm:"😊 Beautiful. Calm is worth protecting — a short soundscape session can help you carry this feeling through the rest of your day.",
+  stressed:"😰 Noted, gently. Try the Box Breathing exercise below (4·4·4·4) — 60 seconds is often enough to lower the pressure a notch.",
+  focused:"🧠 Great state to be in! Ride the momentum: pick your most important task and give it one distraction-free sprint.",
+  tired:"😴 Rest is productive too. If you can, take a 10-minute pause — and tonight, the 4-7-8 sleep breathing can help you wind down deeper.",
+  sad:"😢 Thank you for being honest with yourself. Be gentle today. If you'd like, talk it through with Aura above — she's here to listen.",
+  grateful:"🤲 Wonderful. Gratitude compounds — take ten seconds to really savor what brought this feeling. It trains your mind toward peace."
+};
+var moodsEl=$('#moods'),weekEl=$('#weekChart'),scoreEl=$('#scoreVal'),insightEl=$('#insight'),tipEl=$('#moodTip');
+function store(){try{return JSON.parse(localStorage.getItem('aura_moods')||'{}')}catch(e){return{}}}
+function saveStore(o){try{localStorage.setItem('aura_moods',JSON.stringify(o))}catch(e){}}
+function dayKey(d){
+  var y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+function renderWeek(){
+  var data=store(),days=[],names=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  weekEl.innerHTML='';
+  var vals=[],best=null;
+  for(var i=6;i>=0;i--){
+    var d=new Date();d.setDate(d.getDate()-i);
+    var k=dayKey(d),v=data[k]?data[k].v:0;
+    if(v){vals.push(v);if(!best||v>best.v)best={v:v,n:names[d.getDay()]}}
+    var bar=document.createElement('div');bar.className='bar';
+    bar.innerHTML='<div class="fillwrap"><div class="fill" style="height:0%"></div></div><small>'+names[d.getDay()]+'</small>';
+    weekEl.appendChild(bar);
+    (function(fill,h){requestAnimationFrame(function(){requestAnimationFrame(function(){fill.style.height=h+'%'})})})(bar.querySelector('.fill'),v);
+  }
+  if(vals.length){
+    var avg=Math.round(vals.reduce(function(a,b){return a+b},0)/vals.length);
+    scoreEl.textContent=avg+'%';
+    insightEl.innerHTML='<b>💡 Weekly insight:</b> your strongest day was <b>'+best.n+'</b> ('+best.v+'%). '+(avg>=75?'You\u2019re trending calm — keep the routines that got you here.':'Midweek dips are common — a 60-second breathing session on harder days can lift your baseline.');
+  }else{scoreEl.textContent='—'}
+}
+moodsEl.addEventListener('click',function(e){
+  var b=e.target.closest('.mood');if(!b)return;
+  $$('.mood',moodsEl).forEach(function(m){m.classList.remove('sel')});
+  b.classList.add('sel');
+  var m=b.getAttribute('data-m'),v=+b.getAttribute('data-v');
+  var data=store();data[dayKey(new Date())]={m:m,v:v};saveStore(data);
+  tipEl.textContent=TIPS[m];tipEl.classList.add('show');
+  renderWeek();dashRender();
+});
+renderWeek();
+
+/* ============ BREATHING COACH ============ */
+var bPat=[4,4,4,4],bNames=['Inhale','Hold','Exhale','Hold'];
+var bOrb=$('#borb'),bPhase=$('#bphase'),bProg=$('#bprog'),bTime=$('#btime'),bCycles=$('#bcycles'),bBtn=$('#breathBtn');
+var bRun=false,bStart=0,bRAF=0,bElapsed=0;
+$$('.bpat').forEach(function(p){p.addEventListener('click',function(){
+  $$('.bpat').forEach(function(x){x.classList.remove('sel')});
+  p.classList.add('sel');
+  bPat=p.getAttribute('data-p').split(',').map(Number);
+  if(bRun)bStart=performance.now();
+})});
+function bStop(){
+  bRun=false;cancelAnimationFrame(bRAF);
+  if(bElapsed>3){
+    try{
+      var bl=JSON.parse(localStorage.getItem('aura_breath')||'{"s":0,"n":0}');
+      bl.s+=Math.round(bElapsed);bl.n++;
+      localStorage.setItem('aura_breath',JSON.stringify(bl));
+    }catch(e){}
+    if(typeof dashRender==='function')dashRender();
+  }
+  bElapsed=0;
+  bBtn.textContent='Start Breathing';
+  bPhase.textContent='Ready';
+  bOrb.style.transform='scale(1)';
+  bProg.style.strokeDashoffset='289';
+}
+function bTick(now){
+  if(!bRun)return;
+  var el=(now-bStart)/1000;bElapsed=el;
+  var total=bPat.reduce(function(a,b){return a+b},0);
+  var t=el%total,acc=0,idx=0,ph=0;
+  for(var i=0;i<4;i++){
+    if(bPat[i]===0)continue;
+    if(t<acc+bPat[i]){idx=i;ph=(t-acc)/bPat[i];break}
+    acc+=bPat[i];
+  }
+  bPhase.textContent=bNames[idx];
+  var s;
+  if(idx===0)s=.72+ph*.42;
+  else if(idx===1)s=1.14;
+  else if(idx===2)s=1.14-ph*.42;
+  else s=.72;
+  bOrb.style.transform='scale('+s.toFixed(3)+')';
+  bProg.style.strokeDashoffset=(289*(1-(t/total))).toFixed(1);
+  bTime.textContent=Math.floor(el)+'s';
+  bCycles.textContent=Math.floor(el/total);
+  bRAF=requestAnimationFrame(bTick);
+}
+bBtn.addEventListener('click',function(){
+  if(bRun){bStop();return}
+  bRun=true;bStart=performance.now();
+  bBtn.textContent='Stop';
+  bRAF=requestAnimationFrame(bTick);
+});
+
+/* ============ DASHBOARD ============ */
+var MOOD_META={calm:['😊','Calm'],stressed:['😰','Stressed'],focused:['🧠','Focused'],tired:['😴','Tired'],sad:['😢','Sad'],grateful:['🤲','Grateful']};
+var DASH_TIPS=[
+  '💡 Tip: a single 60-second breathing session can measurably lower stress — try one today.',
+  '💡 Tip: logging your mood at the same time each day makes your trend far more meaningful.',
+  '💡 Tip: pairing the Ocean soundscape with box breathing deepens the calming effect.',
+  '💡 Tip: streaks build habits — even a 10-second check-in keeps yours alive.',
+  '💡 Tip: notice your strongest day of the week and ask what made it different.'
+];
+try{$('#dashDate').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}catch(e){}
+$('#dashTip').textContent=DASH_TIPS[new Date().getDate()%DASH_TIPS.length];
+
+function dashRender(){
+  var data=store(),keys=Object.keys(data);
+  var streak=0,d=new Date();
+  if(!data[dayKey(d)])d.setDate(d.getDate()-1);
+  while(data[dayKey(d)]){streak++;d.setDate(d.getDate()-1)}
+  $('#dsStreak').textContent=streak;
+  $('#dsTotal').textContent=keys.length;
+  var vals=[];
+  for(var i=6;i>=0;i--){var dd=new Date();dd.setDate(dd.getDate()-i);var e=data[dayKey(dd)];if(e)vals.push(e.v)}
+  $('#dsAvg').textContent=vals.length?Math.round(vals.reduce(function(a,b){return a+b},0)/vals.length)+'%':'—';
+  var bl={s:0,n:0};
+  try{bl=JSON.parse(localStorage.getItem('aura_breath')||'{"s":0,"n":0}')}catch(e){}
+  $('#dsBreath').textContent=bl.s<60?bl.s+'s':Math.round(bl.s/60)+'m';
+  var counts={},total=0;
+  keys.forEach(function(k){var m=data[k].m;if(MOOD_META[m]){counts[m]=(counts[m]||0)+1;total++}});
+  var dist=$('#distList');
+  if(total){
+    dist.innerHTML='';
+    Object.keys(MOOD_META).forEach(function(m){
+      var c=counts[m]||0;if(!c)return;
+      var row=document.createElement('div');row.className='dist-row';
+      row.innerHTML='<span class="dn">'+MOOD_META[m][0]+' '+MOOD_META[m][1]+'</span><span class="db"><i></i></span><span class="dv">'+c+'</span>';
+      dist.appendChild(row);
+      (function(bar,w){requestAnimationFrame(function(){requestAnimationFrame(function(){bar.style.width=w+'%'})})})(row.querySelector('.db i'),Math.round(c/total*100));
+    });
+  }
+  drawTrend(data);
+}
+function drawTrend(data){
+  var cv=$('#trendCanvas');if(!cv||!cv.getContext)return;
+  var cx=cv.getContext('2d');if(!cx)return;
+  var dpr=window.devicePixelRatio||1,r=cv.parentElement.getBoundingClientRect();
+  if(r.width<10)return;
+  cv.width=r.width*dpr;cv.height=r.height*dpr;cx.scale(dpr,dpr);
+  var W=r.width,H=r.height,pad={t:14,b:26,l:8,r:8};
+  cx.clearRect(0,0,W,H);
+  var pts=[],labels=[];
+  for(var i=13;i>=0;i--){
+    var d=new Date();d.setDate(d.getDate()-i);
+    var e=data[dayKey(d)];
+    pts.push(e?e.v:null);
+    labels.push(d.getDate());
+  }
+  var iw=(W-pad.l-pad.r)/13;
+  cx.strokeStyle='rgba(255,255,255,.06)';cx.lineWidth=1;
+  [25,50,75,100].forEach(function(g){
+    var y=pad.t+(H-pad.t-pad.b)*(1-g/100);
+    cx.beginPath();cx.moveTo(pad.l,y);cx.lineTo(W-pad.r,y);cx.stroke();
+  });
+  cx.fillStyle='rgba(147,160,184,.55)';cx.font='10px Outfit,sans-serif';cx.textAlign='center';
+  labels.forEach(function(l,i){if(i%2===1)cx.fillText(l,pad.l+i*iw,H-8)});
+  var has=pts.some(function(p){return p!==null});
+  if(!has){
+    cx.fillStyle='rgba(147,160,184,.7)';cx.font='300 13px Outfit,sans-serif';
+    cx.fillText('Your 14-day trend will draw itself here after your first check-ins 🌿',W/2,H/2);
+    return;
+  }
+  function Y(v){return pad.t+(H-pad.t-pad.b)*(1-v/100)}
+  var grad=cx.createLinearGradient(0,0,W,0);
+  grad.addColorStop(0,'#6EE7D8');grad.addColorStop(1,'#A78BFA');
+  var segs=[],cur=[];
+  pts.forEach(function(p,i){if(p!==null)cur.push([pad.l+i*iw,Y(p),p]);else if(cur.length){segs.push(cur);cur=[]}});
+  if(cur.length)segs.push(cur);
+  segs.forEach(function(seg){
+    if(seg.length>1){
+      var fill=cx.createLinearGradient(0,pad.t,0,H-pad.b);
+      fill.addColorStop(0,'rgba(110,231,216,.22)');fill.addColorStop(1,'rgba(167,139,250,0)');
+      cx.beginPath();cx.moveTo(seg[0][0],H-pad.b);
+      seg.forEach(function(p){cx.lineTo(p[0],p[1])});
+      cx.lineTo(seg[seg.length-1][0],H-pad.b);cx.closePath();
+      cx.fillStyle=fill;cx.fill();
+      cx.beginPath();
+      seg.forEach(function(p,i){i===0?cx.moveTo(p[0],p[1]):cx.lineTo(p[0],p[1])});
+      cx.strokeStyle=grad;cx.lineWidth=2.5;cx.lineJoin='round';cx.lineCap='round';cx.stroke();
+    }
+    seg.forEach(function(p){
+      cx.beginPath();cx.arc(p[0],p[1],4,0,7);cx.fillStyle='#0B1120';cx.fill();
+      cx.beginPath();cx.arc(p[0],p[1],4,0,7);cx.strokeStyle=grad;cx.lineWidth=2;cx.stroke();
+    });
+  });
+}
+dashRender();
+var dashRT;
+window.addEventListener('resize',function(){clearTimeout(dashRT);dashRT=setTimeout(function(){drawTrend(store())},200)});
+
+/* ============ TOAST ============ */
+var toastEl=$('#toast'),toastT;
+function toast(msg){
+  toastEl.textContent=msg;toastEl.classList.add('show');
+  clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('show')},2600);
+}
+
+/* ============ PLAN & TOKEN SYSTEM ============ */
+var CHAT_LIMIT=12;
+function planGet(){try{return localStorage.getItem('aura_plan')||'free'}catch(e){return 'free'}}
+function planSet(p){try{localStorage.setItem('aura_plan',p)}catch(e){} usageRender();toast(p==='pro'?'✨ Pro unlocked — unlimited chats (demo)':'Switched to Free plan')}
+function todayKey(){return dayKey(new Date())}
+function usageGet(){
+  try{
+    var u=JSON.parse(localStorage.getItem('aura_usage')||'{}');
+    if(u.d!==todayKey())u={d:todayKey(),n:0};
+    return u;
+  }catch(e){return {d:todayKey(),n:0}}
+}
+function usageSave(u){try{localStorage.setItem('aura_usage',JSON.stringify(u))}catch(e){}}
+function chatsLeft(){
+  if(planGet()==='pro')return Infinity;
+  return Math.max(0,CHAT_LIMIT-usageGet().n);
+}
+function consumeChat(){
+  if(planGet()==='pro'){usageRender();return}
+  var u=usageGet();u.n++;usageSave(u);usageRender();
+  var left=chatsLeft();
+  if(left===3)toast('3 free chats left today');
+}
+function hoursToMidnight(){
+  var now=new Date(),mid=new Date(now);mid.setHours(24,0,0,0);
+  var hrs=Math.ceil((mid-now)/3600000);
+  return hrs<=1?'in <1h':'in '+hrs+'h';
+}
+var leftChip=$('#leftChip');
+function usageRender(){
+  var pro=planGet()==='pro',u=usageGet();
+  if(leftChip)leftChip.textContent=pro?'Pro · unlimited':chatsLeft()+' left today';
+  var fill=$('#usageFill'),txt=$('#usageTxt'),badge=$('#planBadge'),upBtn=$('#dashUpgrade');
+  if(fill){
+    var pct=pro?100:Math.min(100,Math.round(u.n/CHAT_LIMIT*100));
+    fill.style.width=pct+'%';
+    fill.classList.toggle('warn',!pro&&chatsLeft()<=2);
+    txt.textContent=pro?'Unlimited chats on Pro — enjoy':'Chats: '+u.n+' / '+CHAT_LIMIT+' used · resets '+hoursToMidnight();
+    badge.textContent=pro?'Pro plan':'Free plan';
+    badge.classList.toggle('pro',pro);
+    upBtn.textContent=pro?'Manage plan':'Upgrade';
+  }
+}
+function addLimitMsg(){
+  var m=document.createElement('div');
+  m.className='msg ai';
+  m.appendChild(document.createTextNode("You've used all "+CHAT_LIMIT+" free chats for today — they refresh at midnight. 🌙 I'll still be right here. If you'd like unlimited conversations, Pro removes the limit. "));
+  var b=document.createElement('button');
+  b.textContent='✨ Upgrade to Pro';
+  b.style.cssText='display:block;margin-top:10px;padding:9px 18px;border-radius:99px;background:linear-gradient(115deg,#6EE7D8,#A78BFA);color:#06121A;font-weight:600;font-size:.85rem';
+  b.addEventListener('click',openModal);
+  m.appendChild(b);
+  chatLog.appendChild(m);chatLog.scrollTop=chatLog.scrollHeight;
+}
+function addCrisisMsg(){
+  var m=document.createElement('div');m.className='msg ai crisis';
+  function txt(s){m.appendChild(document.createTextNode(s))}
+  function tel(label,num,href){
+    var a=document.createElement('a');a.href=href;a.textContent=label+': '+num;
+    var d=document.createElement('div');d.appendChild(a);m.appendChild(d);
+  }
+  txt("I'm really glad you told me, and I'm concerned about you. You deserve support from a real person right now. 💛 Please reach out to a free, confidential helpline:");
+  tel('🇮🇳 Vandrevala Foundation','+91 9999 666 555','tel:+919999666555');
+  tel('🇮🇳 KIRAN','1800-599-0019','tel:18005990019');
+  tel('🇺🇸 Call or text','988','tel:988');
+  tel('🇬🇧 Samaritans','116 123','tel:116123');
+  var p=document.createElement('div');p.style.marginTop='8px';
+  p.textContent='You are not alone, and this feeling can pass. Would you like to try a slow breathing exercise together while you reach out?';
+  m.appendChild(p);
+  chatLog.appendChild(m);chatLog.scrollTop=chatLog.scrollHeight;
+}
+
+/* ============ UPGRADE MODAL ============ */
+var upModal=$('#upModal');
+function openModal(){
+  $('#goFree').style.display=planGet()==='pro'?'':'none';
+  $('#goPro').style.display=planGet()==='pro'?'none':'';
+  upModal.classList.add('open');
+}
+function closeModal(){upModal.classList.remove('open')}
+$('#upClose').addEventListener('click',closeModal);
+$('#upLater').addEventListener('click',closeModal);
+upModal.addEventListener('click',function(e){if(e.target===upModal)closeModal()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal()});
+$('#goPro').addEventListener('click',function(){planSet('pro');closeModal()});
+$('#goFree').addEventListener('click',function(){planSet('free');closeModal()});
+$('#dashUpgrade').addEventListener('click',openModal);
+$$('.plan-btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    if(b.getAttribute('data-plan')==='free'){
+      if(planGet()==='pro')openModal();else toast("You're already on the Free plan 🌿");
+    }else openModal();
+  });
+});
+usageRender();
+
+/* ============ JOURNAL ============ */
+function jGet(){try{return JSON.parse(localStorage.getItem('aura_journal')||'[]')}catch(e){return[]}}
+function jSave(a){try{localStorage.setItem('aura_journal',JSON.stringify(a))}catch(e){}}
+function jRender(){
+  var list=$('#jList');if(!list)return;
+  list.innerHTML='';
+  var arr=jGet();
+  arr.slice(0,5).forEach(function(en,idx){
+    var e=document.createElement('div');e.className='j-entry';
+    var s=document.createElement('small');
+    var dt=document.createElement('span');dt.textContent=en.d;
+    var del=document.createElement('button');del.textContent='Delete';
+    del.addEventListener('click',function(){
+      var a=jGet();a.splice(idx,1);jSave(a);jRender();toast('Entry deleted');
+    });
+    s.appendChild(dt);s.appendChild(del);
+    var p=document.createElement('p');p.textContent=en.t;
+    e.appendChild(s);e.appendChild(p);list.appendChild(e);
+  });
+}
+var jInEl=$('#jIn');
+if($('#jSave'))$('#jSave').addEventListener('click',function(){
+  var v=jInEl.value.trim();
+  if(!v){toast('Write a line first 🌿');return}
+  var a=jGet();
+  a.unshift({d:new Date().toLocaleString(undefined,{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),t:v});
+  if(a.length>50)a.length=50;
+  jSave(a);jInEl.value='';jRender();toast('Journal entry saved — only on this device 📓');
+});
+jRender();
+
+/* ============ AFFIRMATION ============ */
+var AFFIRM=[
+ "I don't have to carry everything at once. One breath, one step, is enough.",
+ "My feelings are visitors. I can greet them without letting them move in.",
+ "Rest is not a reward I must earn. It is part of the work.",
+ "I am allowed to grow slowly. Even rivers take the long way to the sea.",
+ "Today I will speak to myself the way I would speak to a dear friend.",
+ "Calm is not the absence of storms — it is knowing I can stand in them.",
+ "I release what I cannot control, and give my energy to what I can."
+];
+if($('#affirm'))$('#affirm').textContent=AFFIRM[new Date().getDate()%AFFIRM.length];
+
+/* ============ EXPORT CSV ============ */
+if($('#exportBtn'))$('#exportBtn').addEventListener('click',function(){
+  var data=store(),keys=Object.keys(data).sort();
+  if(!keys.length){toast('Log a mood first — nothing to export yet');return}
+  var rows=['date,mood,clarity'];
+  keys.forEach(function(k){rows.push(k+','+data[k].m+','+data[k].v)});
+  try{
+    var blob=new Blob([rows.join('\n')],{type:'text/csv'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);a.download='aura-mood-history.csv';
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+    toast('Mood history exported ⬇');
+  }catch(e){toast('Export not supported in this browser')}
+});
+
+/* ============ LOADER ============ */
+var loaderEl=$('#loader');
+function hideLoader(){
+  if(!loaderEl)return;
+  loaderEl.classList.add('hide');
+  setTimeout(function(){if(loaderEl.parentNode)loaderEl.parentNode.removeChild(loaderEl);loaderEl=null},700);
+}
+if(document.readyState==='complete')hideLoader();
+else window.addEventListener('load',hideLoader);
+setTimeout(hideLoader,2200);
+
+/* ============ BACK TO TOP ============ */
+var toTop=$('#toTop');
+window.addEventListener('scroll',function(){
+  toTop.classList.toggle('show',window.scrollY>700);
+},{passive:true});
+toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+document.addEventListener('focusin',function(e){
+  if(e.target.matches('input,textarea,select'))toTop.classList.add('kb-hide');
+});
+document.addEventListener('focusout',function(e){
+  if(e.target.matches('input,textarea,select'))setTimeout(function(){toTop.classList.remove('kb-hide')},150);
+});
+var chatPanelEl=$('#chatPanel');
+if(chatPanelEl && 'IntersectionObserver' in window){
+  var chatIO=new IntersectionObserver(function(es){
+    es.forEach(function(e){toTop.classList.toggle('in-chat',e.isIntersecting)});
+  },{threshold:0.15});
+  chatIO.observe(chatPanelEl);
+}
+
+/* ============ FIRST VISIT WELCOME ============ */
+try{
+  if(!localStorage.getItem('aura_seen')){
+    localStorage.setItem('aura_seen','1');
+    setTimeout(function(){toast('Welcome to Aura 🌿 Everything here stays private on your device.')},2600);
+  }
+}catch(e){}
+
+})();
+
+</script>
+</body>
+</html>

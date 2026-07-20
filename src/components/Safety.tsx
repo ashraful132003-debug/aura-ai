@@ -46,7 +46,7 @@ export default function Safety() {
             {HELPLINES.map((region) => (
               <div className="hl" key={region.name}>
                 <b>
-                  {region.flag} {region.name}
+                  <span className="iso">{region.code}</span> {region.name}
                 </b>
                 {region.entries.map((e) => (
                   <a href={e.href} key={e.href + e.label}>

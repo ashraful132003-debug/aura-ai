@@ -160,7 +160,10 @@ export default function ThreeBackground() {
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
         if (w > 880) {
-          group.position.set(2.15, 0, 0);
+          // Mirror the orb to the opposite side in RTL so it doesn't sit under
+          // the (now right-aligned) hero text.
+          const rtl = document.documentElement.dir === 'rtl';
+          group.position.set(rtl ? -2.15 : 2.15, 0, 0);
           group.scale.setScalar(1);
         } else {
           group.position.set(0, 1.15, 0);
@@ -173,6 +176,10 @@ export default function ThreeBackground() {
       const onOrient = () => setTimeout(layout, 300);
       window.addEventListener('orientationchange', onOrient);
       cleanups.push(() => window.removeEventListener('orientationchange', onOrient));
+      // Reposition when the language (and thus dir) changes.
+      const dirObserver = new MutationObserver(layout);
+      dirObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
+      cleanups.push(() => dirObserver.disconnect());
 
       const hero = document.querySelector('.hero') as HTMLElement | null;
       const clock = new THREE.Clock();

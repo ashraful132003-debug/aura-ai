@@ -251,7 +251,7 @@ export default function Chat() {
                         {CHAT_CRISIS_LINES.map((line) => (
                           <div key={line.href + line.label}>
                             <a href={line.href}>
-                              {line.label}: {line.num}
+                              <span className="iso">{line.code}</span> {line.label}: {line.num}
                             </a>
                           </div>
                         ))}

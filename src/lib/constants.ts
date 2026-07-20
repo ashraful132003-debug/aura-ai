@@ -45,14 +45,15 @@ export const BREATH_PATTERNS: BreathPattern[] = [
 export const BREATH_PHASE_NAMES = ['Inhale', 'Hold', 'Exhale', 'Hold'];
 
 export interface HelplineRegion {
-  flag: string;
+  /** ISO-ish 2-letter code shown as a badge (flag emojis don't render on Windows) */
+  code: string;
   name: string;
   entries: { label: string; num: string; href: string }[];
 }
 
 export const HELPLINES: HelplineRegion[] = [
   {
-    flag: '🇮🇳',
+    code: 'IN',
     name: 'India',
     entries: [
       { label: 'Vandrevala Foundation', num: '+91 9999 666 555', href: 'tel:+919999666555' },
@@ -60,7 +61,7 @@ export const HELPLINES: HelplineRegion[] = [
     ],
   },
   {
-    flag: '🇺🇸',
+    code: 'US',
     name: 'United States',
     entries: [
       { label: 'Suicide & Crisis Lifeline', num: 'Call/text 988', href: 'tel:988' },
@@ -68,7 +69,7 @@ export const HELPLINES: HelplineRegion[] = [
     ],
   },
   {
-    flag: '🇬🇧',
+    code: 'UK',
     name: 'United Kingdom',
     entries: [
       { label: 'Samaritans UK', num: '116 123', href: 'tel:116123' },
@@ -76,7 +77,7 @@ export const HELPLINES: HelplineRegion[] = [
     ],
   },
   {
-    flag: '🇨🇦',
+    code: 'CA',
     name: 'Canada',
     entries: [{ label: 'Suicide Crisis Helpline', num: 'Call/text 988', href: 'tel:988' }],
   },
@@ -84,10 +85,10 @@ export const HELPLINES: HelplineRegion[] = [
 
 /** Crisis helplines surfaced inside a chat bubble (subset of HELPLINES). */
 export const CHAT_CRISIS_LINES = [
-  { label: '🇮🇳 Vandrevala Foundation', num: '+91 9999 666 555', href: 'tel:+919999666555' },
-  { label: '🇮🇳 KIRAN', num: '1800-599-0019', href: 'tel:18005990019' },
-  { label: '🇺🇸 Call or text', num: '988', href: 'tel:988' },
-  { label: '🇬🇧 Samaritans', num: '116 123', href: 'tel:116123' },
+  { code: 'IN', label: 'Vandrevala Foundation', num: '+91 9999 666 555', href: 'tel:+919999666555' },
+  { code: 'IN', label: 'KIRAN', num: '1800-599-0019', href: 'tel:18005990019' },
+  { code: 'US', label: 'Call or text', num: '988', href: 'tel:988' },
+  { code: 'UK', label: 'Samaritans', num: '116 123', href: 'tel:116123' },
 ];
 
 export const MOOD_TIPS: Record<MoodName, string> = {

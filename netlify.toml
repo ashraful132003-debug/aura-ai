@@ -1,0 +1,17 @@
+# Netlify configuration for the Aura AI Next.js app.
+# Netlify's Next.js runtime (@netlify/plugin-nextjs) turns the App Router app
+# into static assets + serverless functions automatically — including the
+# /api/chat route, which becomes a Netlify Function. No separate backend needed.
+#
+# IMPORTANT: set the GROQ environment variable in the Netlify dashboard
+# (Site settings → Environment variables). The key is NOT committed to the repo.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

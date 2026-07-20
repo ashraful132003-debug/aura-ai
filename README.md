@@ -25,6 +25,23 @@ npm run lint     # eslint
 npm run typecheck
 ```
 
+## Deploy (Netlify)
+
+This is a full Next.js app, **not** a static site — the Groq chat needs a server-side
+secret, so it runs as a serverless function. Netlify handles this out of the box; you
+do **not** need a separate backend.
+
+1. Connect the repo in Netlify → **New site from Git** (branch: `nextjs-migration`, or
+   `main` once merged). `netlify.toml` already sets the build command, Node version,
+   and the Next.js runtime plugin.
+2. In **Site settings → Environment variables**, add:
+   - `GROQ` = your Groq API key (from https://console.groq.com/keys)
+   - *(optional)* `GROQ_MODEL` to override the default model
+3. Deploy. The homepage is served as static assets; `/api/chat` runs as a Netlify
+   Function. The key stays server-side and never reaches the browser.
+
+> GitHub Pages can't run this app (it needs a build + functions). Netlify is the target.
+
 ## Project structure
 
 ```
